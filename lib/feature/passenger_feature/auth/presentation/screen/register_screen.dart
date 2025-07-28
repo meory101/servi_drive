@@ -2,17 +2,22 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:servi_drive/core/resource/color_manager.dart';
+import 'package:servi_drive/core/resource/cubit_status_manager.dart';
 import 'package:servi_drive/core/resource/font_manager.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
 import 'package:servi_drive/core/widget/bottom_sheet/main_app_bottom_sheet.dart';
 import 'package:servi_drive/core/widget/container/dot_container.dart';
+import 'package:servi_drive/core/widget/container/shimmer_container.dart';
 import 'package:servi_drive/core/widget/drop_down/NameAndId.dart';
 import 'package:servi_drive/core/widget/drop_down/title_drop_down_form_field.dart';
 import 'package:servi_drive/core/widget/form_field/title_app_form_filed.dart';
+import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/core/widget/text/app_text_widget.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/register_request_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
 import 'package:servi_drive/router/router.dart';
 
@@ -20,6 +25,8 @@ import '../../../../../core/resource/constant_manager.dart';
 import '../../../../../core/widget/form_field/title_calendar_form_field.dart';
 import '../../../../../core/widget/form_field/title_time_form_field.dart';
 import 'dart:ui' as ui;
+
+import '../cubit/register_cubit/register_state.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -40,11 +47,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: MainAppBottomSheet(
-        title: "registerNow".tr(),
-        onTap: () {
-          Navigator.of(context).pushNamed(RouteNamedScreens.verificationCode,
-              arguments: VerificationCodeArgs(phoneNumber: "000000"));
+      bottomSheet: BlocConsumer<RegisterCubit, RegisterState>(
+        listener: (context, state) {
+          if (state.status == CubitStatus.error) {
+            NoteMessage.showErrorSnackBar(context: context, text: state.error);
+          }
+          if (state.status == CubitStatus.success) {
+            Navigator.of(context).pushNamed(RouteNamedScreens.verificationCode,
+                arguments: VerificationCodeArgs(
+                  isReSendOtp: false,
+                    phoneNumber: registerRequestEntity.phoneNumber ?? ""));
+          }
+        },
+        builder: (context, state) {
+          if (state.status == CubitStatus.loading) {
+            return Padding(
+              padding: EdgeInsets.all(AppWidthManager.w3Point8),
+              child: ShimmerContainer(
+                  width: AppWidthManager.w100,
+                  height: AppHeightManager.h6point6),
+            );
+          }
+          return MainAppBottomSheet(
+            title: "registerNow".tr(),
+            onTap: () {
+              if ((registerRequestEntity.fullName ?? "").isEmpty ||
+                  (registerRequestEntity.username ?? '').isEmpty ||
+                  (registerRequestEntity.phoneNumber ?? '').isEmpty ||
+                  (registerRequestEntity.password ?? '').isEmpty) {
+                NoteMessage.showErrorSnackBar(
+                    context: context, text: "enterAllRequiredField".tr());
+                return;
+              }
+              context
+                  .read<RegisterCubit>()
+                  .register(context: context, entity: registerRequestEntity);
+            },
+          );
         },
       ),
       body: SafeArea(
@@ -223,10 +262,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "password".tr(),
                   title: "password".tr(),
                   onChanged: (value) {
+                    registerRequestEntity.password = value;
+
                     return null;
                   },
                   validator: (value) {
-                    registerRequestEntity.password = value;
                     return null;
                   },
                   tileActionWidget: IconButton(

@@ -26,7 +26,7 @@ abstract class AppColorManager {
   static const Color grey = Color(0xff8e8e93);
   static const Color yellow = Color(0xffFFCC00);
   static const Color textAppColor = Color(0xff171717);
-  static const Color shimmerHighlightColor = Color(0xffd9d9d9);
+  static const Color shimmerHighlightColor = Color(0xfff5f5f5); // very light
   static const Color shimmerBaseColor = Color(0xffe0e0e0);
   static Color redOpacity15 = const Color(0xffff3b30).withOpacity(0.15);
   static Color greenOpacity15 = const Color(0xff34c759).withOpacity(0.15);

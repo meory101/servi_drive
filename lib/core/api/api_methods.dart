@@ -15,24 +15,24 @@ class ApiMethods {
   ApiMethods({Map<String, String>? header, this.isSecondBaseUrl}) {
     if (header == null) {
       headers = {
-        "X-Parse-Application-Id": "chamsale",
-        "X-Parse-REST-API-Key": "D5g3A3eVTQV8vzzlXk2qGEHh41a",
+        "Content-type": "application/json",
+        "Accept": "application/json",
       };
       if (AppSharedPreferences.getToken().isNotEmpty) {
-        final token = AppSharedPreferences.getToken();
-        if (token.isNotEmpty) {
-          headers['X-Parse-Session-Token'] = token;
-        } else {}
-      } else {}
+        // print(AppSharedPreferences.getToken());
+        headers['Authorization'] = 'Bearer ${AppSharedPreferences.getToken()}';
+      }
     } else {
       headers = header;
     }
   }
 
+  //Filter Map From Incorrect Or Empty Values Function
+  //with deafult value for each data type
   Map<String, dynamic> filterRequest(Map<String, dynamic> inputMap) {
     final filteredMap = inputMap
       ..removeWhere((key, value) =>
-          value == null ||
+      value == null ||
           value == DateTime(0) ||
           value == '' ||
           value == -1 ||
@@ -42,8 +42,9 @@ class ApiMethods {
           value == "0000-01-01" ||
           value == [] ||
           value == "0000-01-0");
+    //Looping To Check Also The Objeccts Inside The Request
     filteredMap.forEach(
-      (key, value) {
+          (key, value) {
         if (value is Map<String, dynamic>) {
           filterRequest(value);
           filteredMap[key] = filterRequest(value);
@@ -53,11 +54,77 @@ class ApiMethods {
     return filteredMap;
   }
 
+  // Helper method to print formatted logs
+  void _printLog(String method, String url, Map<String, String>? headers, dynamic body, http.Response? response) {
+    print('\n' + '=' * 80);
+    print('🌐 API $method REQUEST');
+    print('=' * 80);
 
+    // Print URL
+    print('📡 URL:');
+    print('   $url');
+    print('');
+
+    // Print Headers
+    if (headers != null && headers.isNotEmpty) {
+      print('📋 HEADERS:');
+      headers.forEach((key, value) {
+        print('   $key: $value');
+      });
+      print('');
+    }
+
+    // Print Request Body
+    if (body != null) {
+      print('📦 REQUEST BODY:');
+      if (body is Map) {
+        print('   ${JsonEncoder.withIndent('   ').convert(body)}');
+      } else {
+        print('   $body');
+      }
+      print('');
+    }
+
+    // Print Response
+    if (response != null) {
+      print('📥 RESPONSE:');
+      print('   Status Code: ${response.statusCode}');
+      print('   Status Message: ${response.reasonPhrase}');
+      print('');
+
+      // Print Response Headers
+      if (response.headers.isNotEmpty) {
+        print('📋 RESPONSE HEADERS:');
+        response.headers.forEach((key, value) {
+          print('   $key: $value');
+        });
+        print('');
+      }
+
+      // Print Response Body
+      if (response.body.isNotEmpty) {
+        print('📦 RESPONSE BODY:');
+        try {
+          // Try to format as JSON
+          final jsonResponse = json.decode(response.body);
+          print('   ${JsonEncoder.withIndent('   ').convert(jsonResponse)}');
+        } catch (e) {
+          // If not JSON, print as string
+          print('   ${response.body}');
+        }
+      }
+    }
+
+    print('=' * 80);
+    print('');
+  }
+
+  //Using this function for all get requests
+  //When the parameter does not needed set as empty value
   Future<http.Response> get(
       {required String url,
-      Map<String, dynamic>? path,
-      Map<String, dynamic>? query}) async {
+        Map<String, dynamic>? path,
+        Map<String, dynamic>? query}) async {
     late Map<String, String> newHeaders;
     newHeaders = headers;
     newHeaders.remove("Content-type");
@@ -68,83 +135,93 @@ class ApiMethods {
       path = filterRequest(path);
     }
 
-    Uri link;
-    http.Response response;
+    Uri finalUri;
     if (path != null && query != null && query.isNotEmpty && path.isNotEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getPath(path)
           .getQuery(query)
           .getLink();
     } else if (query != null && query.isNotEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getQuery(query)
           .getLink();
     } else if (path != null && path.isNotEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getPath(path)
           .getLink();
     } else {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
     }
 
+    // Print request log
+    _printLog('GET', finalUri.toString(), newHeaders, null, null);
 
-    response = await http.get(link, headers: newHeaders);
+    final response = await http.get(finalUri, headers: newHeaders);
 
+    // Print response log
+    _printLog('GET', finalUri.toString(), null, null, response);
 
     return response;
   }
 
+  //Using this function for all post requests
+  //When the parameter does not needed set as empty value
   Future<http.Response> post(
       {required String url,
-      Map<String, dynamic>? body,
-      Map<String, dynamic>? query}) async {
+        Map<String, dynamic>? body,
+        Map<String, dynamic>? query}) async {
     if (query != null) {
       query = filterRequest(query);
     }
     if (body != null) {
       body = filterRequest(body);
     }
-    Uri link;
-    http.Response response;
+    Uri finalUri;
     if (body != null && query != null && query.isNotEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getQuery(query)
           .getLink();
-      response =
-          await http.post(link, body: jsonEncode(body), headers: headers);
     } else if (query != null && query.isNotEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getQuery(query)
           .getLink();
-      response = await http.post(link, headers: headers);
     } else {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
-      response =
-          await http.post(link, body: jsonEncode(body), headers: headers);
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
     }
 
-    if (body != null) {
-    }
+    // Print request log
+    _printLog('POST', finalUri.toString(), headers, body, null);
+
+    final response = await http.post(finalUri,
+        body: body != null ? jsonEncode(body) : null, headers: headers);
+
+    // Print response log
+    _printLog('POST', finalUri.toString(), null, null, response);
 
     return response;
   }
 
-
+  //Using this function for all pu requests
+  //When the parameter does not needed set as empty value
   Future<http.Response> put(
       {required String url, body, required Map<String, dynamic> query}) async {
     query = filterRequest(query);
-    Uri link;
-    http.Response response;
+    Uri finalUri;
     if (query.isEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
-      response = await http.put(link, body: jsonEncode(body), headers: headers);
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
     } else {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getQuery(query)
           .getLink();
-      response = await http.put(link, body: jsonEncode(body), headers: headers);
     }
 
+    // Print request log
+    _printLog('PUT', finalUri.toString(), headers, body, null);
+
+    final response = await http.put(finalUri, body: jsonEncode(body), headers: headers);
+
+    // Print response log
+    _printLog('PUT', finalUri.toString(), null, null, response);
 
     return response;
   }
@@ -153,20 +230,25 @@ class ApiMethods {
     required String url,
     required path,
   }) async {
-    Uri link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
+    headers.removeWhere((key, value) => key.toLowerCase() == 'content-type');
+    Uri finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
 
+    // Print request log
+    _printLog('DELETE', finalUri.toString(), headers, null, null);
 
-    http.Response response = await http.delete(link, headers: headers);
+    final response = await http.delete(finalUri, headers: headers, body: {});
 
+    // Print response log
+    _printLog('DELETE', finalUri.toString(), null, null, response);
 
     return response;
   }
 
   Future<http.Response> postWithMultiFile(
       {required String url,
-      required Map data,
-      required List<File> files,
-      String? imageKey}) async {
+        required Map data,
+        required List<File> files,
+        String? imageKey}) async {
     var multiPartRequest = http.MultipartRequest(
         'POST', Uri.parse('https://${AppConstantManager.baseUrl}/$url'));
 
@@ -190,21 +272,46 @@ class ApiMethods {
       multiPartRequest.fields[key.toString()] = value.toString();
     });
 
+    // Print request log
+    print('\n' + '=' * 80);
+    print('🌐 API POST MULTIFILE REQUEST');
+    print('=' * 80);
+    print('📡 URL:');
+    print('   ${multiPartRequest.url}');
+    print('');
+    print('📋 HEADERS:');
+    multiPartRequest.headers.forEach((key, value) {
+      print('   $key: $value');
+    });
+    print('');
+    print('📦 FILES:');
+    print('   ${files.length} files to upload');
+    files.forEach((file) {
+      print('   - ${basename(file.path)}');
+    });
+    print('');
+    print('📦 FIELDS:');
+    data.forEach((key, value) {
+      print('   $key: $value');
+    });
+    print('=' * 80);
+    print('');
 
+    http.StreamedResponse streamedResponse = await multiPartRequest.send();
+    final response = await http.Response.fromStream(streamedResponse);
 
-    http.StreamedResponse response = await multiPartRequest.send();
-    final httpResponse = await http.Response.fromStream(response);
+    // Print response log
+    _printLog('POST MULTIFILE', multiPartRequest.url.toString(), null, null, response);
 
-
-    return httpResponse;
+    return response;
   }
 
   //Using this function for all post requests
   //When the parameter does not needed set as empty value
   Future<http.Response> patch(
       {required String url,
-      Map<String, dynamic>? body,
-      Map<String, dynamic>? query}) async {
+        Map<String, dynamic>? body,
+        Map<String, dynamic>? query}) async {
     if (query != null) {
       query = filterRequest(query);
     }
@@ -212,30 +319,27 @@ class ApiMethods {
     if (body != null) {
       body = filterRequest(body);
     }
-
-    Uri link;
-    http.Response response;
-
-    // ignore: unnecessary_null_comparison
+    Uri finalUri;
     if (body != null && query != null && query.isNotEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getQuery(query)
           .getLink();
-      response =
-          await http.patch(link, body: jsonEncode(body), headers: headers);
     } else if (query != null && query.isNotEmpty) {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl)
           .getQuery(query)
           .getLink();
-      response = await http.patch(link, headers: headers);
     } else {
-      link = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
-      response =
-          await http.patch(link, body: jsonEncode(body), headers: headers);
+      finalUri = ApiUrl(url, useSecondBaseUrl: isSecondBaseUrl).getLink();
     }
 
-    if (body != null) {
-    }
+    // Print request log
+    _printLog('PATCH', finalUri.toString(), headers, body, null);
+
+    final response = await http.patch(finalUri,
+        body: body != null ? jsonEncode(body) : null, headers: headers);
+
+    // Print response log
+    _printLog('PATCH', finalUri.toString(), null, null, response);
 
     return response;
   }

@@ -4,7 +4,7 @@ abstract class AppConstantManager {
   static const bool stagingEnv = false;
   static const String assetTranslationPath = 'assets/translations';
   static const String appIpConnectionTest = '8.8.8.8';
-  static const String baseUrl = "chamsale.justfortesting.ovh/api";
+  static const String baseUrl = "servydrive.vercel.app";
   static String isoCode ="SY";
 
   static String imageLoader({required String imageAsBase64}) =>

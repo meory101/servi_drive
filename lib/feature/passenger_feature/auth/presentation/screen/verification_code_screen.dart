@@ -4,6 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:servi_drive/core/resource/cubit_status_manager.dart';
+import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/verify_otp_request_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_state.dart';
 
 import 'dart:ui' as ui;
 
@@ -26,6 +31,13 @@ class VerificationCodeScreen extends StatefulWidget {
 }
 
 class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
+  @override
+  void initState() {
+    if(widget.args.isReSendOtp ==true){
+      //todo nour call re send otp
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,9 +107,24 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
               SizedBox(
                 height: AppHeightManager.h6,
               ),
-              Directionality(
-                  textDirection: ui.TextDirection.ltr,
-                  child: VerificationCodeWidget(onCodeEntered: (value) {})),
+              BlocConsumer<VerifyOtpCubit, VerifyOtpState>(
+                listener: (context, state) {
+                 if(state.status == CubitStatus.error){
+                   NoteMessage.showErrorSnackBar(context: context, text: state.error);
+                 }
+                },
+                builder: (context, state) {
+                  return Directionality(
+                      textDirection: ui.TextDirection.ltr,
+                      child: VerificationCodeWidget(onCodeEntered: (value) {
+                        context.read<VerifyOtpCubit>().verifyOtp(
+                            context: context,
+                            entity: VerifyOtpRequestEntity(
+                                otpCode: value,
+                                phoneNumber: widget.args.phoneNumber));
+                      }));
+                },
+              ),
               SizedBox(
                 height: AppHeightManager.h5,
               ),
@@ -115,6 +142,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
 
 class VerificationCodeArgs {
   final String phoneNumber;
+  final bool isReSendOtp;
 
-  VerificationCodeArgs({required this.phoneNumber});
+  VerificationCodeArgs({required this.phoneNumber,required this.isReSendOtp});
 }

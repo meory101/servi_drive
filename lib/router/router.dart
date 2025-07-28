@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:servi_drive/core/navigation/slid_left_builder_route.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/register_cubit/register_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/auth_intro_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/register_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
@@ -70,8 +71,15 @@ abstract class AppRouter {
       case RouteNamedScreens.verificationCode:
         argument as VerificationCodeArgs;
         CurrentRoute.currentRouteName = RouteNamedScreens.verificationCode;
-        return FadeBuilderRoute(
-          page: VerificationCodeScreen(args: argument),
+        return SlidUpBuilderRoute(
+          page: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => di.sl<VerifyOtpCubit>(),
+              )
+            ],
+            child: VerificationCodeScreen(args: argument),
+          ),
         );
       case RouteNamedScreens.login:
         CurrentRoute.currentRouteName = RouteNamedScreens.login;

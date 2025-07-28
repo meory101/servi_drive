@@ -22,7 +22,7 @@ class ErrorResponseEntity {
   factory ErrorResponseEntity.fromJson(Map<String, dynamic> json) =>
       ErrorResponseEntity(
         errorCode: json["code"] ?? 0,
-        message: json["error"] ?? '',
+        message: (json["message"] ?? '').toString(),
       );
 
   Map<String, dynamic> toJson() => {

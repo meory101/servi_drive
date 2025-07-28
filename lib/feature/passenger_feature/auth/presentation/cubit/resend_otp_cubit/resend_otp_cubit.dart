@@ -3,20 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/api/api_error/api_error.dart';
 import '../../../../../../core/api/api_error/api_failures.dart';
 import '../../../../../../core/resource/cubit_status_manager.dart';
-import '../../../domain/entity/request/verify_otp_request_entity.dart';
-import '../../../domain/usecase/verify_otp_usecase.dart';
-import 'verfiy_otp_state.dart';
+import '../../../domain/entity/request/resend_otp_request_entity.dart';
+import '../../../domain/usecase/resend_otp_usecase.dart';
+import 'resend_otp_state.dart';
 
-class VerifyOtpCubit extends Cubit<VerifyOtpState> {
-  final VerifyOtpUsecase usecase;
+class ResendOtpCubit extends Cubit<ResendOtpState> {
+  final ResendOtpUsecase usecase;
 
-  VerifyOtpCubit({
+  ResendOtpCubit({
     required this.usecase,
-  }) : super(VerifyOtpState.initial());
+  }) : super(ResendOtpState.initial());
 
-  void verifyOtp({
+  void resendOtp({
     required BuildContext context,
-    required VerifyOtpRequestEntity entity,
+    required ResendOtpRequestEntity entity,
   }) async {
     emit(state.copyWith(status: CubitStatus.loading));
     
@@ -25,7 +25,7 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
     if (isClosed) return;
 
     result.fold(
-          (failure) async {
+      (failure) async {
         final ErrorEntity errorEntity = await ApiErrorHandler.mapFailure(
             failure: failure, buildContext: context);
         emit(state.copyWith(
@@ -40,6 +40,4 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
       },
     );
   }
-
-
-}
+} 

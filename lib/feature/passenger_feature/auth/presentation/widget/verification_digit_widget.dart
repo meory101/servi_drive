@@ -23,7 +23,11 @@ class _VerificationCodeWidgetState extends State<VerificationCodeWidget> {
       child: Pinput(
         autofocus: true,
         keyboardType: TextInputType.number,
-        onCompleted: widget.onCodeEntered,
+        onCompleted: (value) {
+          print('ddddddddddddddddddddddddddddd');
+          print(value);
+          widget.onCodeEntered(value);
+        },
         length: 4,
         androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
         focusedPinTheme: PinTheme(

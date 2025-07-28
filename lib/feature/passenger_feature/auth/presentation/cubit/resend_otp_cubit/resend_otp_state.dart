@@ -1,27 +1,27 @@
 import 'package:equatable/equatable.dart';
 import '../../../../../../core/resource/cubit_status_manager.dart';
 
-class VerifyOtpState extends Equatable {
+class ResendOtpState extends Equatable {
   final String error;
   final CubitStatus status;
 
-  const VerifyOtpState({
+  const ResendOtpState({
     required this.error,
     required this.status,
   });
 
-  factory VerifyOtpState.initial() {
-    return const VerifyOtpState(
+  factory ResendOtpState.initial() {
+    return const ResendOtpState(
       error: '',
       status: CubitStatus.initial,
     );
   }
 
-  VerifyOtpState copyWith({
+  ResendOtpState copyWith({
     String? error,
     CubitStatus? status,
   }) {
-    return VerifyOtpState(
+    return ResendOtpState(
       error: error ?? this.error,
       status: status ?? this.status,
     );
@@ -29,4 +29,4 @@ class VerifyOtpState extends Equatable {
 
   @override
   List<Object> get props => [error, status];
-}
+} 

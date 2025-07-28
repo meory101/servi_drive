@@ -14,5 +14,10 @@
   "gender": "Gender",
   "male": "Male",
   "female": "Female",
-  "email": "Email"
+  "email": "Email",
+  "verifyOtp": "Verify OTP",
+  "enterOtpCode": "Enter OTP Code",
+  "otpSentTo": "OTP sent to",
+  "resendOtp": "Resend OTP",
+  "enterAllRequiredField" : "Enter All Required Fields"
 }

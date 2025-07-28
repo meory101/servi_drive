@@ -25,6 +25,10 @@ LoginRequestEntity copyWith({  String? username,
   String? get username => _username;
   String? get password => _password;
 
+  set username(String? value) {
+    _username = value;
+  }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['username'] = _username;
@@ -32,4 +36,7 @@ LoginRequestEntity copyWith({  String? username,
     return map;
   }
 
+  set password(String? value) {
+    _password = value;
+  }
 }
