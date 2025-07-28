@@ -1,1 +1,18 @@
-{}
+{
+  "registerNow": "Register Now",
+  "Register": "Register",
+  "pleaseFillTheFollowingFieldToCreateAnAccount": "Please fill the following fields to create an account",
+  "fullName": "Full Name",
+  "username": "Username",
+  "userNameHasToBeUnique": "Username has to be unique",
+  "thisIsWhatYouWillUseToLoginInPleaseRememberIt": "This is what you will use to log in, please remember it",
+  "phoneNumber": "Phone Number",
+  "password": "Password",
+  "minPasswordLengthIs6": "Minimum password length is 6 characters",
+  "dateOfBirth": "Date of Birth",
+  "Date": "Date",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "email": "Email"
+}

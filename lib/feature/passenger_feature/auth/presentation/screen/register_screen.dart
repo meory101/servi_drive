@@ -13,6 +13,8 @@ import 'package:servi_drive/core/widget/drop_down/title_drop_down_form_field.dar
 import 'package:servi_drive/core/widget/form_field/title_app_form_filed.dart';
 import 'package:servi_drive/core/widget/text/app_text_widget.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/register_request_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
+import 'package:servi_drive/router/router.dart';
 
 import '../../../../../core/resource/constant_manager.dart';
 import '../../../../../core/widget/form_field/title_calendar_form_field.dart';
@@ -40,7 +42,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       bottomSheet: MainAppBottomSheet(
         title: "registerNow".tr(),
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pushNamed(RouteNamedScreens.verificationCode,
+              arguments: VerificationCodeArgs(phoneNumber: "000000"));
+        },
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -242,41 +247,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     switchOutCurve: Curves.easeIn,
                     child: showPasswordNote
                         ? Column(
-                      key: ValueKey(true), // Needed for AnimatedSwitcher
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: AppHeightManager.h1point8),
-                        Row(
-                          children: [
-                            DotContainer(
-                                color: AppColorManager.mainColor),
-                            SizedBox(width: AppWidthManager.w2point5),
-                            Expanded(
-                              child: AppTextWidget(
-                                text:
-                                'minPasswordLengthIs6'
-                                    .tr(),
-                                fontSize: FontSizeManager.fs15,
-                                color: AppColorManager.grey,
-                                fontWeight: FontWeight.w500,
-                                maxLines: 3,
+                            key: ValueKey(true), // Needed for AnimatedSwitcher
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: AppHeightManager.h1point8),
+                              Row(
+                                children: [
+                                  DotContainer(
+                                      color: AppColorManager.mainColor),
+                                  SizedBox(width: AppWidthManager.w2point5),
+                                  Expanded(
+                                    child: AppTextWidget(
+                                      text: 'minPasswordLengthIs6'.tr(),
+                                      fontSize: FontSizeManager.fs15,
+                                      color: AppColorManager.grey,
+                                      fontWeight: FontWeight.w500,
+                                      maxLines: 3,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: AppHeightManager.h1point8),
-                      ],
-                    )
-                        .animate(
-                      delay: 100.ms,
-                    )
-                        .fadeIn(duration: 400.ms)
-                        .slideX(
-                        begin: 0.3,
-                        end: 0,
-                        duration: 400.ms,
-                        curve: Curves.easeOut)
-                        .scale(duration: 400.ms)
+                              SizedBox(height: AppHeightManager.h1point8),
+                            ],
+                          )
+                            .animate(
+                              delay: 100.ms,
+                            )
+                            .fadeIn(duration: 400.ms)
+                            .slideX(
+                                begin: 0.3,
+                                end: 0,
+                                duration: 400.ms,
+                                curve: Curves.easeOut)
+                            .scale(duration: 400.ms)
                         : Center()),
                 SizedBox(
                   height: AppHeightManager.h4,

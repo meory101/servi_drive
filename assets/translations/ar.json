@@ -1,1 +1,18 @@
-{}
+{
+  "registerNow": "سجل الآن",
+  "Register": "تسجيل",
+  "pleaseFillTheFollowingFieldToCreateAnAccount": "يرجى ملء الحقول التالية لإنشاء حساب",
+  "fullName": "الاسم الكامل",
+  "username": "اسم المستخدم",
+  "userNameHasToBeUnique": "يجب أن يكون اسم المستخدم فريداً",
+  "thisIsWhatYouWillUseToLoginInPleaseRememberIt": "هذا ما ستستخدمه لتسجيل الدخول، يرجى تذكره",
+  "phoneNumber": "رقم الهاتف",
+  "password": "كلمة المرور",
+  "minPasswordLengthIs6": "الحد الأدنى لطول كلمة المرور هو 6 أحرف",
+  "dateOfBirth": "تاريخ الميلاد",
+  "Date": "التاريخ",
+  "gender": "الجنس",
+  "male": "ذكر",
+  "female": "أنثى",
+  "email": "البريد الإلكتروني"
+}

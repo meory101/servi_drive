@@ -1,0 +1,41 @@
+import 'package:equatable/equatable.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/response/register_response_entity.dart';
+
+import '../../../../../../core/resource/cubit_status_manager.dart';
+
+/// Eng.nour othman*
+///
+class LoginState extends Equatable {
+  final String error;
+  final CubitStatus status;
+  final RegisterResponseEntity entity;
+
+  const LoginState({
+    required this.error,
+    required this.status,
+    required this.entity,
+  });
+
+  factory LoginState.initial() {
+    return LoginState(
+      entity: RegisterResponseEntity(),
+      error: '',
+      status: CubitStatus.initial,
+    );
+  }
+
+  LoginState copyWith({
+    String? error,
+    CubitStatus? status,
+    RegisterResponseEntity? entity,
+  }) {
+    return LoginState(
+      error: error ?? this.error,
+      status: status ?? this.status,
+      entity: entity ?? this.entity,
+    );
+  }
+
+  @override
+  List<Object> get props => [error, status, entity];
+}
