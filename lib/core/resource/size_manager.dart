@@ -41,6 +41,7 @@ abstract class AppWidthManager {
   static double w4point2 = 4.2.w;
   static double w4point3 = 4.5.w;
   static double w5 = 5.w;
+  static double w5point5 = 5.5.w;
   static double w6 = 6.w;
   static double w6point5 = 6.5.w;
 

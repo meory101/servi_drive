@@ -27,6 +27,7 @@ class TitleAppFormFiled extends StatefulWidget {
     this.textInputType,
     this.hintTextDirection,
     this.controller,
+    this.tileActionWidget,
     this.textDirection,
     this.obscureText,
     this.formKey,
@@ -51,6 +52,7 @@ class TitleAppFormFiled extends StatefulWidget {
   final TextInputType? textInputType;
   final TextDirection? hintTextDirection;
   final TextDirection? textDirection;
+  final Widget? tileActionWidget;
 
   @override
   State<TitleAppFormFiled> createState() => _TitleAppFormFiledState();
@@ -87,17 +89,25 @@ class _TitleAppFormFiledState extends State<TitleAppFormFiled> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.isRequired == true
-            ? RequiredTextWidget(
-                title: widget.title,
-                color: titleColor,
-              )
-            : AppTextWidget(
-                text: widget.title,
-                fontSize: FontSizeManager.fs16,
-                fontWeight: FontWeight.w600,
-                color: titleColor,
-              ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          widget.isRequired == true
+              ? RequiredTextWidget(
+            title: widget.title,
+            color: titleColor,
+          )
+              : AppTextWidget(
+            text: widget.title,
+            fontSize: FontSizeManager.fs16,
+            fontWeight: FontWeight.w600,
+            color: titleColor,
+          ),
+
+
+          widget.tileActionWidget??Center()
+        ],
+      ),
         SizedBox(height: AppHeightManager.h08),
         AppTextFormField(
           focusNode: _focusNode,

@@ -9,11 +9,9 @@ import '../datasource/local/auth_local.dart';
 
 class AuthRepositoryImplements implements AuthRepository {
   final AuthRemote remote;
-  final AuthLocal local;
 
   AuthRepositoryImplements({
     required this.remote,
-    required this.local,
   });
 
   @override
@@ -23,14 +21,6 @@ class AuthRepositoryImplements implements AuthRepository {
     return Connector<RegisterResponseEntity>().connect(
       remote: () async {
         final result = await remote.register(entity: entity);
-        
-        // Save token and user data locally on successful registration
-        if (result.accessToken != null) {
-          await local.saveToken(result.accessToken!);
-        }
-        if (result.user != null) {
-          await local.saveUser(result.user!);
-        }
         
         return Right(result);
       },

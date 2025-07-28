@@ -21,6 +21,10 @@ class RegisterRequestEntity {
     _role = role;
 }
 
+  set username(String? value) {
+    _username = value;
+  }
+
   RegisterRequestEntity.fromJson(dynamic json) {
     _username = json['username'];
     _phoneNumber = json['phoneNumber'];
@@ -72,4 +76,27 @@ RegisterRequestEntity copyWith({  String? username,
     return map;
   }
 
+  set phoneNumber(String? value) {
+    _phoneNumber = value;
+  }
+
+  set fullName(String? value) {
+    _fullName = value;
+  }
+
+  set password(String? value) {
+    _password = value;
+  }
+
+  set email(String? value) {
+    _email = value;
+  }
+
+  set gender(String? value) {
+    _gender = value;
+  }
+
+  set role(String? value) {
+    _role = value;
+  }
 }
