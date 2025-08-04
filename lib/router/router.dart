@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:servi_drive/core/navigation/slid_left_builder_route.dart';
+import 'package:servi_drive/core/storage/shared/shared_pref.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_cubit.dart';
@@ -9,6 +10,9 @@ import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/a
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/register_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/my_trips_screen.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/driver_info_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/trip_details_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/trip_offers_screen.dart';
@@ -20,7 +24,7 @@ import '../feature/passenger_feature/main/presentation/screen/main_bottom_app_ba
 import '../core/injection/injection_container.dart' as di;
 
 abstract class RouteNamedScreens {
-  static String init = authIntro;
+  static String init = main;
   static const String main = "/main-bottom-app-bar";
   static const String myTrips = "/my-trips";
   static const String tripDetails = "/trip-details";
@@ -35,12 +39,30 @@ abstract class RouteNamedScreens {
 abstract class AppRouter {
   // ignore: body_might_complete_normally_nullable
   static Route? onGenerateRoute(RouteSettings settings) {
+    print(AppSharedPreferences.getToken());
+    print('---------------------------------------------------');
     final argument = settings.arguments;
     switch (settings.name) {
       case RouteNamedScreens.main:
         CurrentRoute.currentRouteName = RouteNamedScreens.main;
         return FadeBuilderRoute(
-          page: MainAppBottomAppBar(),
+          page: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                di.sl<TripRoutesCubit>()..getTripRoutes(context: context),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    di.sl<ConditionsCubit>()..getConditions(context: context),
+              ),
+              BlocProvider(
+                create: (context) =>
+                di.sl<NewTripCubit>(),
+              )
+            ],
+            child: MainAppBottomAppBar(),
+          ),
         );
       case RouteNamedScreens.myTrips:
         CurrentRoute.currentRouteName = RouteNamedScreens.myTrips;

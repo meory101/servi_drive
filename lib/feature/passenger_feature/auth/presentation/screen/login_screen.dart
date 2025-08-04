@@ -7,6 +7,8 @@ import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/login_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/login/login_state.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
+import 'package:servi_drive/router/router.dart';
 
 import '../../../../../core/resource/color_manager.dart';
 import '../../../../../core/resource/font_manager.dart';
@@ -33,6 +35,14 @@ class _LoginScreenState extends State<LoginScreen> {
         listener: (context, state) {
           if (state.status == CubitStatus.error) {
             NoteMessage.showErrorSnackBar(context: context, text: state.error);
+          }
+          if (state.status == CubitStatus.success) {
+            if ((state.entity.isVerified ?? true) == false) {
+              Navigator.of(context).pushNamed(
+                  RouteNamedScreens.verificationCode,
+                  arguments:
+                      VerificationCodeArgs(phoneNumber: "", isReSendOtp: true));
+            }
           }
         },
         builder: (context, state) {

@@ -1,18 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:servi_drive/core/model/trip_route.dart';
+import 'package:servi_drive/core/resource/cubit_status_manager.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
+import 'package:servi_drive/core/widget/container/shimmer_container.dart';
+import 'package:servi_drive/core/widget/drop_down/NameAndId.dart';
 import 'package:servi_drive/core/widget/drop_down/title_drop_down_form_field.dart';
 import 'package:servi_drive/core/widget/form_field/title_app_form_filed.dart';
 import 'package:servi_drive/core/widget/form_field/title_calendar_form_field.dart';
 import 'package:servi_drive/core/widget/form_field/title_time_form_field.dart';
+import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_state.dart';
 
 import '../../../../../core/resource/color_manager.dart';
+import '../screen/add_trip_screen.dart';
 
 class NewTripFormFields extends StatelessWidget {
   final TextEditingController travellers;
   final TextEditingController luggage;
   final int travellerCount;
-  final int luggageCount;final bool fast;
+  final int luggageCount;
+  final bool fast;
   final ValueChanged<int> onTravellerCountChanged;
   final ValueChanged<int> onLuggageCountChanged;
   final ValueChanged<DateTime> onDateChanged;
@@ -36,11 +46,35 @@ class NewTripFormFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleDropDownFormFieldWidget(
-          isRequired: true,
-          hint: "Trip Route".tr(),
-          title: "Trip Route".tr(),
-          options: [],
+        BlocConsumer<TripRoutesCubit, TripRoutesState>(
+          listener: (context, state) {
+            if (state.status == CubitStatus.error) {
+              NoteMessage.showErrorSnackBar(
+                  context: context, text: state.error);
+            }
+          },
+          builder: (context, state) {
+            if (state.status == CubitStatus.loading) {
+              return ShimmerContainer(
+                  width: AppWidthManager.w100,
+                  height: AppHeightManager.h6point6);
+            }
+
+            List<TripRoute> tripRoutes = state.entity.routes ?? [];
+            List<NameAndId> tripRouteOptions = [];
+            tripRoutes.forEach(
+              (element) {
+                tripRouteOptions.add(NameAndId(
+                    name: element.routeName ?? "", id: element.id ?? ""));
+              },
+            );
+            return TitleDropDownFormFieldWidget(
+              isRequired: true,
+              hint: "Trip Route".tr(),
+              title: "Trip Route".tr(),
+              options: tripRouteOptions,
+            );
+          },
         ),
         SizedBox(
           height: AppHeightManager.h1point8,
@@ -83,6 +117,7 @@ class NewTripFormFields extends StatelessWidget {
                 readOnly: true,
                 title: "Travellers".tr(),
                 onChanged: (value) {
+
                   return null;
                 },
                 validator: (value) {
@@ -147,7 +182,7 @@ class NewTripFormFields extends StatelessWidget {
           height: AppHeightManager.h1point8,
         ),
         Visibility(
-          visible: fast==false,
+          visible: fast == false,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

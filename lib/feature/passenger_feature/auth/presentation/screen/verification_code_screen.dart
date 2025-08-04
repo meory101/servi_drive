@@ -9,6 +9,7 @@ import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/verify_otp_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_state.dart';
+import 'package:servi_drive/router/router.dart';
 
 import 'dart:ui' as ui;
 
@@ -111,6 +112,9 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                 listener: (context, state) {
                  if(state.status == CubitStatus.error){
                    NoteMessage.showErrorSnackBar(context: context, text: state.error);
+                 }
+                 if(state.status == CubitStatus.success){
+                   Navigator.of(context).pushNamedAndRemoveUntil(RouteNamedScreens.main,(route) => false,);
                  }
                 },
                 builder: (context, state) {

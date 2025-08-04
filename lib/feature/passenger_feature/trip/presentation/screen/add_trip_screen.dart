@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
 import 'package:servi_drive/core/widget/container/drag_container.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/request/new_trip_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/widget/new_trip_button.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/widget/new_trip_form_fields.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/widget/new_trip_map.dart';
@@ -105,10 +106,11 @@ class _AddTripScreenState extends State<AddTripScreen> {
                               setState(() {
                                 luggageCount = count;
                                 luggage.text = luggageCount.toString();
+
                               });
                             },
                             onDateChanged: (date) {
-                              // handle date
+
                             },
                             onTimeChanged: (time) {
                               // handle time
@@ -141,4 +143,9 @@ class _AddTripScreenState extends State<AddTripScreen> {
       ),
     );
   }
+}
+
+
+abstract class TripRequestHelper{
+ static NewTripRequestEntity entity  = NewTripRequestEntity();
 }

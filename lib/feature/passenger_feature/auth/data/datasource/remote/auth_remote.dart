@@ -44,9 +44,15 @@ class AuthRemoteImplement extends AuthRemote {
     final response =
     await ApiMethods().post(url: ApiPostUrl.login,body: entity.toJson());
 
-    if (ApiStatusCode.success().contains(response.statusCode) || response.statusCode == 401) {
+    if (ApiStatusCode.success().contains(response.statusCode)) {
       return loginResponseEntityFromJson(response.body);
-    } else {
+    }
+
+    if( response.statusCode == 401){
+      return loginResponseEntityFromJson('{"isVerified": false}');
+
+    }
+    else {
       throw ApiServerException(response: response);
     }
   }

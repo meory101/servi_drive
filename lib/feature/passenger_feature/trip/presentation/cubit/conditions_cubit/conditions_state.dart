@@ -1,36 +1,36 @@
 import 'package:equatable/equatable.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/response/login_response_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/response/register_response_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/trip_routes_response_entity.dart';
 
 import '../../../../../../core/resource/cubit_status_manager.dart';
+import '../../../domain/entity/response/conditions_response_entity.dart';
 
 /// Eng.nour othman*
-///
-class LoginState extends Equatable {
+class ConditionsState extends Equatable {
   final String error;
   final CubitStatus status;
-  final LoginResponseEntity entity;
+  final PreferredConditionsResponseEntity entity;
 
-  const LoginState({
+  const ConditionsState({
     required this.error,
     required this.status,
     required this.entity,
   });
 
-  factory LoginState.initial() {
-    return LoginState(
-      entity: LoginResponseEntity(),
+  factory ConditionsState.initial() {
+    return ConditionsState(
+      entity: PreferredConditionsResponseEntity(),
       error: '',
       status: CubitStatus.initial,
     );
   }
 
-  LoginState copyWith({
+  ConditionsState copyWith({
     String? error,
     CubitStatus? status,
-    LoginResponseEntity? entity,
+    PreferredConditionsResponseEntity? entity,
   }) {
-    return LoginState(
+    return ConditionsState(
       error: error ?? this.error,
       status: status ?? this.status,
       entity: entity ?? this.entity,

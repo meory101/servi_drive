@@ -1,4 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:servi_drive/core/resource/cubit_status_manager.dart';
+import 'package:servi_drive/core/widget/container/shimmer_container.dart';
+import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_state.dart';
 
 import '../../../../../core/resource/color_manager.dart';
 import '../../../../../core/resource/font_manager.dart';
@@ -13,22 +19,35 @@ class NewTripButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MainAppButton(
-      onTap: () {
-        showDescBudgetDialog(context: context);
+    return BlocConsumer<NewTripCubit, NewTripState>(
+      listener: (context, state) {
+        if (state.status == CubitStatus.error) {
+          NoteMessage.showErrorSnackBar(context: context, text: state.error);
+        }
       },
-      height: AppHeightManager.h6,
-      width: AppWidthManager.w100,
-      color: AppColorManager.lightMainColor,
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(
-          horizontal: AppWidthManager.w3Point8),
-      child: AppTextWidget(
-        text: "Create Trip Now",
-        color: AppColorManager.white,
-        fontWeight: FontWeight.w600,
-        fontSize: FontSizeManager.fs16,
-      ),
+      builder: (context, state) {
+        if(state.status == CubitStatus.loading){
+          return ShimmerContainer(          height: AppHeightManager.h6,
+            width: AppWidthManager.w100,);
+        }
+        return MainAppButton(
+          onTap: () {
+            showDescBudgetDialog(context: context);
+          },
+          height: AppHeightManager.h6,
+          width: AppWidthManager.w100,
+          color: AppColorManager.lightMainColor,
+          alignment: Alignment.center,
+          margin: EdgeInsets.symmetric(
+              horizontal: AppWidthManager.w3Point8),
+          child: AppTextWidget(
+            text: "Create Trip Now",
+            color: AppColorManager.white,
+            fontWeight: FontWeight.w600,
+            fontSize: FontSizeManager.fs16,
+          ),
+        );
+      },
     );
   }
 }
