@@ -1,5 +1,4 @@
 import 'dart:convert';
-/// phoneNumber : "+1234567890"
 
 ResendOtpRequestEntity resendOtpRequestEntityFromJson(String str) => ResendOtpRequestEntity.fromJson(json.decode(str));
 String resendOtpRequestEntityToJson(ResendOtpRequestEntity data) => json.encode(data.toJson());

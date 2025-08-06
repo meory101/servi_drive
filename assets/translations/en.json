@@ -19,5 +19,25 @@
   "enterOtpCode": "Enter OTP Code",
   "otpSentTo": "OTP sent to",
   "resendOtp": "Resend OTP",
-  "enterAllRequiredField" : "Enter All Required Fields"
+  "enterAllRequiredField" : "Enter All Required Fields",
+  "Create An Account" : "Create An Account",
+  "Login" : "Login",
+  "hello" : "Hello",
+  "forgotPassword" : "Forgot Password ?",
+  "welcomeToServiDrive" : "Welcome To Servi Drive",
+  "loginToContinueToYourAccount"  : "Login To Continue To Your Account",
+  "enterCode": "Enter Verification Code",
+  "otpSentMessage": "A one-time code has been sent to your WhatsApp. Please enter it below to verify your account.",
+  "accountVerifiedSuccessfully": "Your account has been verified successfully!",
+  "verifyAccount": "Verify Account",
+  "enterThePhoneNumberThatYouUsedToCreateAccount": "You have already registered but didn’t verify your account. Please enter the same phone number to receive a WhatsApp code for verification.",
+  "sendCode": "Send Code",
+  "enterPhoneToResetPassword": "Enter your phone number to receive a code and reset your password.",
+  "resetPassword": "Reset Password",
+  "resetPasswordSubtitle": "Enter the code sent to your WhatsApp and set a new password.",
+  "passwordResetSuccessfully": "Your password has been reset successfully!",
+  "verificationCode": "Verification Code",
+  "newPassword": "New Password",
+  "resetNow": "Reset Now"
+
 }

@@ -7,6 +7,8 @@ import '../../domain/repository/auth_repository.dart';
 import '../../domain/entity/request/register_request_entity.dart';
 import '../../domain/entity/request/verify_otp_request_entity.dart';
 import '../../domain/entity/request/resend_otp_request_entity.dart';
+import '../../domain/entity/request/forgot_password_request_entity.dart';
+import '../../domain/entity/request/reset_password_request_entity.dart';
 import '../../domain/entity/response/register_response_entity.dart';
 import '../datasource/remote/auth_remote.dart';
 
@@ -60,6 +62,30 @@ class AuthRepositoryImplements implements AuthRepository {
     return Connector<bool>().connect(
       remote: () async {
         final result = await remote.resendOtp(entity: entity);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<ApiFailure, bool>> forgotPassword({
+    required ForgotPasswordRequestEntity entity,
+  }) async {
+    return Connector<bool>().connect(
+      remote: () async {
+        final result = await remote.forgotPassword(entity: entity);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<ApiFailure, bool>> resetPassword({
+    required ResetPasswordRequestEntity entity,
+  }) async {
+    return Connector<bool>().connect(
+      remote: () async {
+        final result = await remote.resetPassword(entity: entity);
         return Right(result);
       },
     );

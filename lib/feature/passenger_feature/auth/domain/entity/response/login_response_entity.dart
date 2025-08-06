@@ -20,7 +20,10 @@ class LoginResponseEntity {
   }
 
   LoginResponseEntity.fromJson(dynamic json) {
+    print(json['isVerified']);
+    print('fffffffffffffffffffffffff');
     _isVerified = json['isVerified'];
+    print(_isVerified);
     _user = json['user'] != null ? User.fromJson(json['user']) : null;
     _accessToken = json['access_token'];
   }

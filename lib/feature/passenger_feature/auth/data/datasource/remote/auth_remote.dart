@@ -2,6 +2,8 @@
 
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/resend_otp_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/verify_otp_request_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/forgot_password_request_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/reset_password_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/response/login_response_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/response/register_response_entity.dart';
 import '../../../../../../core/api/api_error/api_exception.dart';
@@ -21,6 +23,8 @@ abstract class AuthRemote {
   Future<LoginResponseEntity> login({required LoginRequestEntity entity});
   Future<bool> verifyOtp({required VerifyOtpRequestEntity entity});
   Future<bool> resendOtp({required ResendOtpRequestEntity entity});
+  Future<bool> forgotPassword({required ForgotPasswordRequestEntity entity});
+  Future<bool> resetPassword({required ResetPasswordRequestEntity entity});
 
 }
 
@@ -73,6 +77,30 @@ class AuthRemoteImplement extends AuthRemote {
   Future<bool> resendOtp({required ResendOtpRequestEntity entity}) async{
     final response =
     await ApiMethods().post(url: ApiPostUrl.resendOtp,body: entity.toJson());
+
+    if (ApiStatusCode.success().contains(response.statusCode)) {
+      return true;
+    } else {
+      throw ApiServerException(response: response);
+    }
+  }
+
+  @override
+  Future<bool> forgotPassword({required ForgotPasswordRequestEntity entity}) async{
+    final response =
+    await ApiMethods().post(url: ApiPostUrl.forgotPassword,body: entity.toJson());
+
+    if (ApiStatusCode.success().contains(response.statusCode)) {
+      return true;
+    } else {
+      throw ApiServerException(response: response);
+    }
+  }
+
+  @override
+  Future<bool> resetPassword({required ResetPasswordRequestEntity entity}) async{
+    final response =
+    await ApiMethods().post(url: ApiPostUrl.resetPassword,body: entity.toJson());
 
     if (ApiStatusCode.success().contains(response.statusCode)) {
       return true;

@@ -12,6 +12,8 @@ class ApiPostUrl {
   static String login = "auth/login";
   static String verifyOtp = "auth/verify-otp";
   static String resendOtp = "auth/resend-otp";
+  static String forgotPassword = "auth/forgot-password";
+  static String resetPassword = "auth/reset-password";
 
 
 }

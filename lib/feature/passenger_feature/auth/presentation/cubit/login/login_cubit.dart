@@ -43,6 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
       (data) {
         emit(state.copyWith(
           status: CubitStatus.success,
+          entity: data
         ));
         AppSharedPreferences.cashToken(token: data.accessToken ??"");
       },

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:servi_drive/core/resource/cubit_status_manager.dart';
+import 'package:servi_drive/core/storage/shared/shared_pref.dart';
 import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/login_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/login/login_cubit.dart';
@@ -37,11 +38,15 @@ class _LoginScreenState extends State<LoginScreen> {
             NoteMessage.showErrorSnackBar(context: context, text: state.error);
           }
           if (state.status == CubitStatus.success) {
+            print(state.entity.isVerified);
             if ((state.entity.isVerified ?? true) == false) {
               Navigator.of(context).pushNamed(
-                  RouteNamedScreens.verificationCode,
-                  arguments:
-                      VerificationCodeArgs(phoneNumber: "", isReSendOtp: true));
+                  RouteNamedScreens.numberResendCodeScreen,);
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                RouteNamedScreens.main,
+                (route) => false,
+              );
             }
           }
         },
@@ -64,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     context: context, text: "enterAllRequiredField".tr());
                 return;
               }
+              AppSharedPreferences.clear();
               context
                   .read<LoginCubit>()
                   .login(context: context, entity: loginRequestEntity);
@@ -104,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   hint: "username".tr(),
                   title: "username".tr(),
                   onChanged: (value) {
-                    loginRequestEntity.username = value;
+                    loginRequestEntity.username = value?.trim();
                     return null;
                   },
                   validator: (value) {
@@ -134,7 +140,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     AppTextWidget(
-                      text: "forgotPassword?".tr(),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(RouteNamedScreens.numberResetPasswordScreen);
+                      },
+                      text: "forgotPassword".tr(),
                       color: AppColorManager.lightMainColor,
                     )
                   ],

@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:servi_drive/core/resource/color_manager.dart';
 import 'package:servi_drive/core/resource/font_manager.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
@@ -9,7 +8,6 @@ import 'package:servi_drive/core/widget/button/main_app_button.dart';
 import 'package:servi_drive/core/widget/text/app_text_widget.dart';
 import 'package:servi_drive/router/router.dart';
 
-import '../../../../../core/resource/icon_manager.dart';
 
 class AuthIntroScreen extends StatefulWidget {
   const AuthIntroScreen({super.key});

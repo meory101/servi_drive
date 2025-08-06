@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:servi_drive/core/resource/cubit_status_manager.dart';
+import 'package:servi_drive/core/widget/container/shimmer_container.dart';
 import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/verify_otp_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_cubit.dart';
@@ -34,11 +35,9 @@ class VerificationCodeScreen extends StatefulWidget {
 class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   @override
   void initState() {
-    if(widget.args.isReSendOtp ==true){
-      //todo nour call re send otp
-    }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,14 +109,31 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
               ),
               BlocConsumer<VerifyOtpCubit, VerifyOtpState>(
                 listener: (context, state) {
-                 if(state.status == CubitStatus.error){
-                   NoteMessage.showErrorSnackBar(context: context, text: state.error);
-                 }
-                 if(state.status == CubitStatus.success){
-                   Navigator.of(context).pushNamedAndRemoveUntil(RouteNamedScreens.main,(route) => false,);
-                 }
+                  if (state.status == CubitStatus.error) {
+                    NoteMessage.showErrorSnackBar(
+                        context: context, text: state.error);
+                  }
+                  if (state.status == CubitStatus.success) {
+                    if (widget.args.isResendOtp == true) {
+                      NoteMessage.showSuccessSnackBar(
+                          context: context,
+                          text: "accountVerifiedSuccessfully".tr());
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      return;
+                    }
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      RouteNamedScreens.main,
+                      (route) => false,
+                    );
+                  }
                 },
                 builder: (context, state) {
+                  if (state.status == CubitStatus.loading) {
+                    return ShimmerContainer(
+                        width: AppWidthManager.w100,
+                        height: AppHeightManager.h6point6);
+                  }
                   return Directionality(
                       textDirection: ui.TextDirection.ltr,
                       child: VerificationCodeWidget(onCodeEntered: (value) {
@@ -146,7 +162,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
 
 class VerificationCodeArgs {
   final String phoneNumber;
-  final bool isReSendOtp;
+  final bool isResendOtp;
 
-  VerificationCodeArgs({required this.phoneNumber,required this.isReSendOtp});
+  VerificationCodeArgs({required this.phoneNumber, required this.isResendOtp});
 }

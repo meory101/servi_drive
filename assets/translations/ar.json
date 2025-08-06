@@ -19,6 +19,26 @@
   "enterOtpCode": "أدخل رمز التحقق",
   "otpSentTo": "تم إرسال رمز التحقق إلى",
   "resendOtp": "إعادة إرسال رمز التحقق",
-  "enterAllRequiredField" : "ادخل جميع الحقول المطلوبة"
+  "enterAllRequiredField" : "ادخل جميع الحقول المطلوبة",
+  "Create An Account": "إنشاء حساب",
+  "Login": "تسجيل الدخول",
+  "hello": "مرحبًا",
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "welcomeToServiDrive": "مرحبًا بك في Servi Drive",
+  "loginToContinueToYourAccount": "قم بتسجيل الدخول للمتابعة إلى حسابك",
+  "enterCode": "أدخل رمز التحقق",
+  "otpSentMessage": "تم إرسال رمز التحقق لمرة واحدة إلى واتساب الخاص بك. الرجاء إدخاله أدناه لتأكيد حسابك.",
+  "accountVerifiedSuccessfully": "تم التحقق من حسابك بنجاح!",
+  "verifyAccount": "تأكيد الحساب",
+  "enterThePhoneNumberThatYouUsedToCreateAccount": "لقد قمت بالتسجيل مسبقًا ولكن لم يتم التحقق من حسابك. الرجاء إدخال نفس رقم الهاتف لاستلام رمز التحقق عبر واتساب.",
+  "sendCode": "إرسال الرمز",
+  "enterPhoneToResetPassword": "أدخل رقم هاتفك لاستلام رمز وإعادة تعيين كلمة المرور.",
+
+  "resetPassword": "إعادة تعيين كلمة المرور",
+  "resetPasswordSubtitle": "أدخل الرمز المرسل إلى واتساب وقم بتعيين كلمة مرور جديدة.",
+  "passwordResetSuccessfully": "تم إعادة تعيين كلمة المرور بنجاح!",
+  "verificationCode": "رمز التحقق",
+  "newPassword": "كلمة المرور الجديدة",
+  "resetNow": "إعادة التعيين الآن"
 
 }

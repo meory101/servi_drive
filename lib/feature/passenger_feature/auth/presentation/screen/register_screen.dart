@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           if (state.status == CubitStatus.success) {
             Navigator.of(context).pushNamed(RouteNamedScreens.verificationCode,
                 arguments: VerificationCodeArgs(
-                  isReSendOtp: false,
+                  isResendOtp: false,
                     phoneNumber: registerRequestEntity.phoneNumber ?? ""));
           }
         },
@@ -71,6 +71,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           return MainAppBottomSheet(
             title: "registerNow".tr(),
             onTap: () {
+              print(registerRequestEntity.fullName );
+              print(registerRequestEntity.username );
+              print(registerRequestEntity.phoneNumber );
+              print(registerRequestEntity.password );
               if ((registerRequestEntity.fullName ?? "").isEmpty ||
                   (registerRequestEntity.username ?? '').isEmpty ||
                   (registerRequestEntity.phoneNumber ?? '').isEmpty ||
@@ -134,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "username".tr(),
                   title: "username".tr(),
                   onChanged: (value) {
-                    registerRequestEntity.username = value;
+                    registerRequestEntity.username = value?.trim();
                     return null;
                   },
                   validator: (value) {
@@ -158,54 +162,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     switchOutCurve: Curves.easeIn,
                     child: showUserNameNote
                         ? Column(
-                            key: ValueKey(true), // Needed for AnimatedSwitcher
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: AppHeightManager.h1point8),
-                              Row(
-                                children: [
-                                  DotContainer(
-                                      color: AppColorManager.mainColor),
-                                  SizedBox(width: AppWidthManager.w2point5),
-                                  AppTextWidget(
-                                    text: 'userNameHasToBeUnique'.tr(),
-                                    fontSize: FontSizeManager.fs15,
-                                    color: AppColorManager.grey,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ],
+                      key: ValueKey(true), // Needed for AnimatedSwitcher
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: AppHeightManager.h1point8),
+                        Row(
+                          children: [
+                            DotContainer(
+                                color: AppColorManager.mainColor),
+                            SizedBox(width: AppWidthManager.w2point5),
+                            AppTextWidget(
+                              text: 'userNameHasToBeUnique'.tr(),
+                              fontSize: FontSizeManager.fs15,
+                              color: AppColorManager.grey,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            DotContainer(
+                                color: AppColorManager.mainColor),
+                            SizedBox(width: AppWidthManager.w2point5),
+                            Expanded(
+                              child: AppTextWidget(
+                                text:
+                                'thisIsWhatYouWillUseToLoginInPleaseRememberIt'
+                                    .tr(),
+                                fontSize: FontSizeManager.fs15,
+                                color: AppColorManager.grey,
+                                fontWeight: FontWeight.w500,
+                                maxLines: 3,
                               ),
-                              Row(
-                                children: [
-                                  DotContainer(
-                                      color: AppColorManager.mainColor),
-                                  SizedBox(width: AppWidthManager.w2point5),
-                                  Expanded(
-                                    child: AppTextWidget(
-                                      text:
-                                          'thisIsWhatYouWillUseToLoginInPleaseRememberIt'
-                                              .tr(),
-                                      fontSize: FontSizeManager.fs15,
-                                      color: AppColorManager.grey,
-                                      fontWeight: FontWeight.w500,
-                                      maxLines: 3,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: AppHeightManager.h1point8),
-                            ],
-                          )
-                            .animate(
-                              delay: 100.ms,
-                            )
-                            .fadeIn(duration: 400.ms)
-                            .slideX(
-                                begin: 0.3,
-                                end: 0,
-                                duration: 400.ms,
-                                curve: Curves.easeOut)
-                            .scale(duration: 400.ms)
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: AppHeightManager.h1point8),
+                      ],
+                    )
+                        .animate(
+                      delay: 100.ms,
+                    )
+                        .fadeIn(duration: 400.ms)
+                        .slideX(
+                        begin: 0.3,
+                        end: 0,
+                        duration: 400.ms,
+                        curve: Curves.easeOut)
+                        .scale(duration: 400.ms)
                         : Center()),
                 SizedBox(
                   height: AppHeightManager.h1point8,
@@ -224,7 +228,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       textDirection: ui.TextDirection.ltr,
                       child: InternationalPhoneNumberInput(
                         onInputChanged: (PhoneNumber value) {
-                          registerRequestEntity.phoneNumber = value.phoneNumber;
+                          String? newPhone  = value.phoneNumber;
+                          if (value.phoneNumber?.startsWith("0") ?? false) {
+                            newPhone = value.phoneNumber?.replaceFirst("0", "");
+                            print(newPhone);
+                          }
+
+                          registerRequestEntity.phoneNumber = newPhone;
                         },
                         inputBorder: InputBorder.none,
                         hintText: "phoneNumber".tr(),
@@ -240,7 +250,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             fontSize: FontSizeManager.fs17),
                         textAlign: TextAlign.left,
                         initialValue:
-                            PhoneNumber(isoCode: AppConstantManager.isoCode),
+                        PhoneNumber(isoCode: AppConstantManager.isoCode),
                         keyboardAction: TextInputAction.done,
                         cursorColor: AppColorManager.lightMainColor,
                         selectorConfig: SelectorConfig(
@@ -287,39 +297,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     switchOutCurve: Curves.easeIn,
                     child: showPasswordNote
                         ? Column(
-                            key: ValueKey(true), // Needed for AnimatedSwitcher
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: AppHeightManager.h1point8),
-                              Row(
-                                children: [
-                                  DotContainer(
-                                      color: AppColorManager.mainColor),
-                                  SizedBox(width: AppWidthManager.w2point5),
-                                  Expanded(
-                                    child: AppTextWidget(
-                                      text: 'minPasswordLengthIs6'.tr(),
-                                      fontSize: FontSizeManager.fs15,
-                                      color: AppColorManager.grey,
-                                      fontWeight: FontWeight.w500,
-                                      maxLines: 3,
-                                    ),
-                                  ),
-                                ],
+                      key: ValueKey(true), // Needed for AnimatedSwitcher
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: AppHeightManager.h1point8),
+                        Row(
+                          children: [
+                            DotContainer(
+                                color: AppColorManager.mainColor),
+                            SizedBox(width: AppWidthManager.w2point5),
+                            Expanded(
+                              child: AppTextWidget(
+                                text: 'minPasswordLengthIs6'.tr(),
+                                fontSize: FontSizeManager.fs15,
+                                color: AppColorManager.grey,
+                                fontWeight: FontWeight.w500,
+                                maxLines: 3,
                               ),
-                              SizedBox(height: AppHeightManager.h1point8),
-                            ],
-                          )
-                            .animate(
-                              delay: 100.ms,
-                            )
-                            .fadeIn(duration: 400.ms)
-                            .slideX(
-                                begin: 0.3,
-                                end: 0,
-                                duration: 400.ms,
-                                curve: Curves.easeOut)
-                            .scale(duration: 400.ms)
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: AppHeightManager.h1point8),
+                      ],
+                    )
+                        .animate(
+                      delay: 100.ms,
+                    )
+                        .fadeIn(duration: 400.ms)
+                        .slideX(
+                        begin: 0.3,
+                        end: 0,
+                        duration: 400.ms,
+                        curve: Curves.easeOut)
+                        .scale(duration: 400.ms)
                         : Center()),
                 SizedBox(
                   height: AppHeightManager.h4,
@@ -334,7 +344,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Expanded(
                       child: TitleCalendarFormField(
-                        minDate: DateTime(DateTime.now().year - 18),
+                        minDate: DateTime(DateTime
+                            .now()
+                            .year - 18),
                         title: "dateOfBirth".tr(),
                         onDateChanged: (p0) {},
                         hint: "Date".tr(),
