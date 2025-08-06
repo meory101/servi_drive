@@ -26,4 +26,7 @@ class ApiDeleteUrl {
 
 
 }
-class ApiPutUrl {}
+class ApiPutUrl {
+  static String uploadProfileImage = "user/image";
+
+}

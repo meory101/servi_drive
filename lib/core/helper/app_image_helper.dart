@@ -13,8 +13,8 @@ abstract class AppImageHelper {
     try {
       final photo = await ImagePicker().pickImage(
         source: source,
-        maxHeight: 1000,
-        maxWidth: 1000,
+        maxHeight: 600,
+        maxWidth: 600,
         imageQuality: 85,
       );
       if (photo == null) return null;
@@ -31,8 +31,8 @@ abstract class AppImageHelper {
     List<File>? finalImages = [];
     try {
       List<XFile?>? photos = await ImagePicker().pickMultiImage(
-        maxHeight: 1000,
-        maxWidth: 1000,
+        maxHeight: 600,
+        maxWidth: 600,
         imageQuality: 85,
       );
 

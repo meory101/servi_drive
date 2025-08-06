@@ -1,16 +1,25 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:servi_drive/core/helper/app_image_helper.dart';
+import 'package:servi_drive/core/helper/file_helper.dart';
 import 'package:servi_drive/core/resource/color_manager.dart';
 import 'package:servi_drive/core/resource/font_manager.dart';
 import 'package:servi_drive/core/resource/icon_manager.dart';
 import 'package:servi_drive/core/resource/image_manager.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
+import 'package:servi_drive/core/widget/container/shimmer_container.dart';
 import 'package:servi_drive/core/widget/image/main_image_widget.dart';
 import 'package:servi_drive/core/widget/text/app_text_widget.dart';
+import 'package:servi_drive/feature/passenger_feature/more/domain/entity/request/upload_profile_image_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_state.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_state.dart';
 import 'package:servi_drive/router/router.dart';
 
 import '../../../../../core/model/user.dart';
@@ -28,23 +37,24 @@ class MoreScreen extends StatefulWidget {
 }
 
 class _MoreScreenState extends State<MoreScreen> {
+  File? profileImage;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: RefreshIndicator(
-          onRefresh: () async{
-            context.read<GetProfileCubit>().getProfile(context: context);
-          },
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            
-            child: Stack(children: [
-                  Container(
+      onRefresh: () async {
+        context.read<GetProfileCubit>().getProfile(context: context);
+      },
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Stack(children: [
+          Container(
             height: AppHeightManager.h20,
             decoration: BoxDecoration(color: AppColorManager.darkMainColor),
-                  ),
-                  Container(
-                    height: AppHeightManager.h100,
+          ),
+          Container(
+            height: AppHeightManager.h100,
             margin: EdgeInsets.only(top: AppHeightManager.h10),
             decoration: BoxDecoration(
                 color: AppColorManager.background,
@@ -52,8 +62,8 @@ class _MoreScreenState extends State<MoreScreen> {
                   topLeft: Radius.circular(AppRadiusManager.r20),
                   topRight: Radius.circular(AppRadiusManager.r20),
                 )),
-                  ),
-                  Row(
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
@@ -70,26 +80,116 @@ class _MoreScreenState extends State<MoreScreen> {
                       },
                       builder: (context, state) {
                         if (state.status == CubitStatus.loading) {
-                          return AppCircularProgressWidget();
+                          return Column(
+                            children: [
+                              Container(
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                height: AppWidthManager.w25,
+                                width: AppWidthManager.w25,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColorManager.white,
+                                ),
+                                child: ShimmerContainer(
+                                  height: AppWidthManager.w25,
+                                  width: AppWidthManager.w25,
+                                  boxShape: BoxShape.circle,
+                                ),
+                              ),
+                              SizedBox(
+                                height: AppHeightManager.h1point8,
+                              ),
+                              ShimmerContainer(
+                                  width: AppWidthManager.w30,
+                                  height: AppHeightManager.h1point8)
+                            ],
+                          );
                         }
-                        User? user=state.profile?.user;
+
+                        User? user = state.profile?.user;
                         return Column(
                           children: [
-                            Container(
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              height: AppWidthManager.w25,
-                              width: AppWidthManager.w25,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColorManager.white,
-                              ),
-                              child: MainImageWidget(
-                                imagePath: AppImageManager.placeholder,
-                              ),
+                            BlocConsumer<UploadProfileImageCubit,
+                                UploadProfileImageState>(
+                              listener: (context, state) {
+                                if (state.status == CubitStatus.error) {
+                                  NoteMessage.showErrorSnackBar(
+                                      context: context, text: state.error);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state.status == CubitStatus.loading) {
+                                  return Container(
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    height: AppWidthManager.w25,
+                                    width: AppWidthManager.w25,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColorManager.white,
+                                    ),
+                                    child: ShimmerContainer(
+                                      height: AppWidthManager.w25,
+                                      width: AppWidthManager.w25,
+                                      boxShape: BoxShape.circle,
+                                    ),
+                                  );
+                                }
+                                return InkWell(
+                                  onTap: () async {
+                                    profileImage =
+                                        await AppImageHelper.pickImageFrom(
+                                            source: ImageSource.gallery);
+
+                                    if (profileImage?.path != null) {
+                                      context
+                                          .read<UploadProfileImageCubit>()
+                                          .uploadProfileImage(
+                                              context: context, entity: UploadProfileImageRequestEntity(
+                                        image: FileHelper.convertToBase64WithHeader(file: profileImage!)
+                                      ));
+                                    }
+
+                                    setState(() {});
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        height: AppWidthManager.w25,
+                                        width: AppWidthManager.w25,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColorManager.white,
+                                        ),
+                                        child: MainImageWidget(
+                                          imagePath: profileImage?.path,
+
+                                          // imageUrl: user.,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: AppHeightManager.h6point6,
+                                        child: CircleAvatar(
+                                          radius: AppWidthManager.w4,
+                                          backgroundColor:
+                                              AppColorManager.darkMainColor,
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: AppWidthManager.w4,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
-                            SizedBox(height: AppHeightManager.h1point8,),
+                            SizedBox(
+                              height: AppHeightManager.h1point8,
+                            ),
                             AppTextWidget(
-                              text: user?.fullName??"",
+                              text: user?.fullName ?? "",
                               color: AppColorManager.darkMainColor,
                               fontSize: FontSizeManager.fs17,
                               fontWeight: FontWeight.w600,
@@ -98,13 +198,12 @@ class _MoreScreenState extends State<MoreScreen> {
                         );
                       },
                     ),
-
                   ],
                 ),
               ),
             ],
-                  ),
-                  Container(
+          ),
+          Container(
             margin: EdgeInsets.only(top: AppHeightManager.h22),
             padding: EdgeInsets.all(AppWidthManager.w3Point8),
             child: Column(
@@ -116,7 +215,8 @@ class _MoreScreenState extends State<MoreScreen> {
                 BasicsItem(
                     title: "My Trips".tr(),
                     onTap: () {
-                      Navigator.of(context).pushNamed(RouteNamedScreens.myTrips);
+                      Navigator.of(context)
+                          .pushNamed(RouteNamedScreens.myTrips);
                     }),
                 SizedBox(
                   height: AppHeightManager.h1point8,
@@ -154,8 +254,8 @@ class _MoreScreenState extends State<MoreScreen> {
                     Expanded(
                         child: SizedBox(
                             height: AppHeightManager.h8,
-                            child:
-                                SettingsItem(title: "Logout".tr(), onTap: () {}))),
+                            child: SettingsItem(
+                                title: "Logout".tr(), onTap: () {}))),
                     SizedBox(
                       width: AppWidthManager.w2,
                     ),
@@ -168,9 +268,9 @@ class _MoreScreenState extends State<MoreScreen> {
                 ),
               ],
             ),
-                  )
-                ]),
-          ),
-        ));
+          )
+        ]),
+      ),
+    ));
   }
 }

@@ -13,6 +13,8 @@ import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/n
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/number_reset_password_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/register_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_state.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/my_trips_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
@@ -58,6 +60,9 @@ abstract class AppRouter {
         return FadeBuilderRoute(
           page: MultiBlocProvider(
             providers: [
+              BlocProvider(
+                create: (context) =>
+                di.sl<UploadProfileImageCubit>()),
               BlocProvider(
                 create: (context) =>
                 di.sl<TripRoutesCubit>()

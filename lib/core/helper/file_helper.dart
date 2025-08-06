@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
-
+import 'package:mime/mime.dart';
 /*nour othman*/
 
 abstract class FileHelper {
@@ -25,6 +25,18 @@ abstract class FileHelper {
     if (file == null) return "";
     List<int> imageBytes = file.readAsBytesSync();
     return base64Encode(imageBytes);
+  }
+
+  static String convertToBase64WithHeader({required File? file}) {
+    if (file == null) return "";
+
+    List<int> imageBytes = file.readAsBytesSync();
+
+    final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+
+    final base64String = base64Encode(imageBytes);
+
+    return 'data:$mimeType;base64,$base64String';
   }
 
   static String getFileName({required File file}) {
