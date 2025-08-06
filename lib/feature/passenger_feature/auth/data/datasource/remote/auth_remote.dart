@@ -1,5 +1,7 @@
 
 
+import 'dart:convert';
+
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/resend_otp_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/verify_otp_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/domain/entity/request/forgot_password_request_entity.dart';
@@ -52,7 +54,7 @@ class AuthRemoteImplement extends AuthRemote {
       return loginResponseEntityFromJson(response.body);
     }
 
-    if( response.statusCode == 401){
+    if( jsonDecode(response.body)['errorCode'] == "PHONE_NOT_VERIFIED"){
       return loginResponseEntityFromJson('{"isVerified": false}');
 
     }

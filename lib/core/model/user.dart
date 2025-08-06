@@ -9,6 +9,7 @@ class User {
     String? fullName,
     String? gender,
     String? email,
+    String? image,
     String? role,
     num? tickets,
     bool? isPhoneVerified,
@@ -27,6 +28,7 @@ class User {
     _id = id;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
+    _image = image;
     _v = v;
   }
 
@@ -35,6 +37,7 @@ class User {
     _username = json['username'];
     _fullName = json['fullName'];
     _gender = json['gender'];
+    _image = json['image'];
     _email = json['email'];
     _role = json['role'];
     _tickets = json['tickets'];
@@ -45,6 +48,7 @@ class User {
     _v = json['__v'];
   }
   String? _phoneNumber;
+  String? _image;
   String? _username;
   String? _fullName;
   String? _gender;
@@ -58,6 +62,7 @@ class User {
   num? _v;
   User copyWith({  String? phoneNumber,
     String? username,
+    String? image,
     String? fullName,
     String? gender,
     String? email,
@@ -73,6 +78,7 @@ class User {
     fullName: fullName ?? _fullName,
     gender: gender ?? _gender,
     email: email ?? _email,
+    image: image?? _image,
     role: role ?? _role,
     tickets: tickets ?? _tickets,
     isPhoneVerified: isPhoneVerified ?? _isPhoneVerified,
@@ -82,6 +88,7 @@ class User {
     v: v ?? _v,
   );
   String? get phoneNumber => _phoneNumber;
+  String? get image => _image;
   String? get username => _username;
   String? get fullName => _fullName;
   String? get gender => _gender;

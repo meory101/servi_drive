@@ -144,9 +144,12 @@ class _MoreScreenState extends State<MoreScreen> {
                                       context
                                           .read<UploadProfileImageCubit>()
                                           .uploadProfileImage(
-                                              context: context, entity: UploadProfileImageRequestEntity(
-                                        image: FileHelper.convertToBase64WithHeader(file: profileImage!)
-                                      ));
+                                              context: context,
+                                              entity: UploadProfileImageRequestEntity(
+                                                  image: FileHelper
+                                                      .convertToBase64WithHeader(
+                                                          file:
+                                                              profileImage!)));
                                     }
 
                                     setState(() {});
@@ -162,11 +165,16 @@ class _MoreScreenState extends State<MoreScreen> {
                                           shape: BoxShape.circle,
                                           color: AppColorManager.white,
                                         ),
-                                        child: MainImageWidget(
-                                          imagePath: profileImage?.path,
-
-                                          // imageUrl: user.,
-                                        ),
+                                        child: (profileImage?.path ?? '')
+                                                .isNotEmpty
+                                            ? Image.file(
+                                                profileImage!,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : MainImageWidget(
+                                                imageUrl: user?.image ?? '',
+                                                // imageUrl: user.,
+                                              ),
                                       ),
                                       Positioned(
                                         top: AppHeightManager.h6point6,

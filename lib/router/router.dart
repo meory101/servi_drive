@@ -33,7 +33,7 @@ import '../core/injection/injection_container.dart' as di;
 import '../feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 
 abstract class RouteNamedScreens {
-  static String init = main;
+  static String init = authIntro;
   static const String main = "/main-bottom-app-bar";
   static const String myTrips = "/my-trips";
   static const String tripDetails = "/trip-details";

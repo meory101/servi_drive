@@ -10,11 +10,16 @@ class RegisterRequestEntity {
       String? fullName, 
       String? password, 
       String? email, 
-      String? gender, 
+      String? gender,
+      String? image,
+      String? dateOfBirth,
+
       String? role,}){
     _username = username;
     _phoneNumber = phoneNumber;
     _fullName = fullName;
+    _image = image;
+    _dateOfBirth = dateOfBirth;
     _password = password;
     _email = email;
     _gender = gender;
@@ -27,6 +32,8 @@ class RegisterRequestEntity {
 
   RegisterRequestEntity.fromJson(dynamic json) {
     _username = json['username'];
+    _image = json['image'];
+    _dateOfBirth = json['dateOfBirth'];
     _phoneNumber = json['phoneNumber'];
     _fullName = json['fullName'];
     _password = json['password'];
@@ -40,10 +47,14 @@ class RegisterRequestEntity {
   String? _password;
   String? _email;
   String? _gender;
+  String? _dateOfBirth;
+  String? _image;
   String? _role;
 RegisterRequestEntity copyWith({  String? username,
   String? phoneNumber,
   String? fullName,
+  String? dateOfBirth,
+  String? image,
   String? password,
   String? email,
   String? gender,
@@ -51,6 +62,8 @@ RegisterRequestEntity copyWith({  String? username,
 }) => RegisterRequestEntity(  username: username ?? _username,
   phoneNumber: phoneNumber ?? _phoneNumber,
   fullName: fullName ?? _fullName,
+  image:  image ?? _image,
+  dateOfBirth: dateOfBirth?? _dateOfBirth,
   password: password ?? _password,
   email: email ?? _email,
   gender: gender ?? _gender,
@@ -72,8 +85,18 @@ RegisterRequestEntity copyWith({  String? username,
     map['password'] = _password;
     map['email'] = _email;
     map['gender'] = _gender;
+    map['image'] = _image;
+    map['dateOfBirth'] = _dateOfBirth;
     map['role'] = _role;
     return map;
+  }
+
+  set image(String? value) {
+    _image = value;
+  }
+
+  set dateOfBirth(String? value) {
+    _dateOfBirth = value;
   }
 
   set phoneNumber(String? value) {

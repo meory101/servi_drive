@@ -1,7 +1,7 @@
 class ApiGetUrl {
 
-  static String tripRoutes = "trip-routes";
-  static String conditions = "preferred-conditions";
+  static String tripRoutes = "trip-routes/active";
+  static String conditions = "preferred-conditions/active";
   static String profile = "auth/profile";
 
 
