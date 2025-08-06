@@ -172,6 +172,8 @@ class _MoreScreenState extends State<MoreScreen> {
                                                 fit: BoxFit.cover,
                                               )
                                             : MainImageWidget(
+                                                imagePath:
+                                                    AppImageManager.placeholder,
                                                 imageUrl: user?.image ?? '',
                                                 // imageUrl: user.,
                                               ),
@@ -197,11 +199,12 @@ class _MoreScreenState extends State<MoreScreen> {
                               height: AppHeightManager.h1point8,
                             ),
                             AppTextWidget(
-                              text: user?.fullName ?? "",
+                              text:
+                                  user?.username ?? "",
                               color: AppColorManager.darkMainColor,
                               fontSize: FontSizeManager.fs17,
                               fontWeight: FontWeight.w600,
-                            )
+                            ),
                           ],
                         );
                       },
@@ -216,7 +219,12 @@ class _MoreScreenState extends State<MoreScreen> {
             padding: EdgeInsets.all(AppWidthManager.w3Point8),
             child: Column(
               children: [
-                BasicsItem(title: "Edit Profile".tr(), onTap: () {}),
+                BasicsItem(
+                    title: "Edit Profile".tr(),
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(RouteNamedScreens.editProfile);
+                    }),
                 SizedBox(
                   height: AppHeightManager.h1point8,
                 ),

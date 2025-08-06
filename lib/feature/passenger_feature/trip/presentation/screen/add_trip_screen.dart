@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:servi_drive/core/helper/date_time_helper.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
 import 'package:servi_drive/core/widget/container/drag_container.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/request/new_trip_request_entity.dart';
@@ -25,6 +26,9 @@ class _AddTripScreenState extends State<AddTripScreen> {
 
   @override
   void initState() {
+    TripRequestHelper.entity.conditions = [];
+    TripRequestHelper.entity.luggageCount = 0;
+    TripRequestHelper.entity.numberOfTravelers =1;
     travellers.text = travellerCount.toString();
     luggage.text = luggageCount.toString();
 
@@ -100,20 +104,23 @@ class _AddTripScreenState extends State<AddTripScreen> {
                               setState(() {
                                 travellerCount = count;
                                 travellers.text = travellerCount.toString();
+                                TripRequestHelper.entity.numberOfTravelers = travellerCount;
                               });
                             },
                             onLuggageCountChanged: (count) {
                               setState(() {
                                 luggageCount = count;
                                 luggage.text = luggageCount.toString();
+                                TripRequestHelper.entity.luggageCount = luggageCount;
 
                               });
                             },
                             onDateChanged: (date) {
-
+                              TripRequestHelper.entity.tripDate =
+                                  DateTimeHelper.formatDateWithDash(date: date);
                             },
                             onTimeChanged: (time) {
-                              // handle time
+                              // TripRequestHelper.entity.tripTime =time;
                             },
                           ),
                         ),
@@ -145,7 +152,6 @@ class _AddTripScreenState extends State<AddTripScreen> {
   }
 }
 
-
-abstract class TripRequestHelper{
- static NewTripRequestEntity entity  = NewTripRequestEntity();
+abstract class TripRequestHelper {
+  static NewTripRequestEntity entity = NewTripRequestEntity();
 }

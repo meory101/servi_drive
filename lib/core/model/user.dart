@@ -14,6 +14,7 @@ class User {
     num? tickets,
     bool? isPhoneVerified,
     String? id,
+    String? birthDate,
     String? createdAt,
     String? updatedAt,
     num? v,}){
@@ -26,6 +27,7 @@ class User {
     _tickets = tickets;
     _isPhoneVerified = isPhoneVerified;
     _id = id;
+    _birthDate = birthDate;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
     _image = image;
@@ -34,6 +36,7 @@ class User {
 
   User.fromJson(dynamic json) {
     _phoneNumber = json['phoneNumber'];
+    _birthDate = json['dateOfBirth'];
     _username = json['username'];
     _fullName = json['fullName'];
     _gender = json['gender'];
@@ -55,6 +58,7 @@ class User {
   String? _email;
   String? _role;
   num? _tickets;
+  String? _birthDate;
   bool? _isPhoneVerified;
   String? _id;
   String? _createdAt;
@@ -67,6 +71,7 @@ class User {
     String? gender,
     String? email,
     String? role,
+    String? birthDate,
     num? tickets,
     bool? isPhoneVerified,
     String? id,
@@ -77,6 +82,7 @@ class User {
     username: username ?? _username,
     fullName: fullName ?? _fullName,
     gender: gender ?? _gender,
+    birthDate: birthDate ?? _birthDate,
     email: email ?? _email,
     image: image?? _image,
     role: role ?? _role,
@@ -88,8 +94,10 @@ class User {
     v: v ?? _v,
   );
   String? get phoneNumber => _phoneNumber;
+
   String? get image => _image;
   String? get username => _username;
+  String? get birthDate => _birthDate;
   String? get fullName => _fullName;
   String? get gender => _gender;
   String? get email => _email;

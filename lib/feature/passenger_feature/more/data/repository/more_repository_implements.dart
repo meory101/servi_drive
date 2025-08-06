@@ -4,6 +4,7 @@ import '../../../../../core/api/connector.dart';
 import '../../domain/repository/more_repository.dart';
 import '../../domain/entity/response/profile_response_entity.dart';
 import '../../domain/entity/request/upload_profile_image_request_entity.dart';
+import '../../domain/entity/request/edit_profile_request_entity.dart';
 import '../datasource/remote/more_remote.dart';
 
 class MoreRepositoryImplements implements MoreRepository {
@@ -28,6 +29,16 @@ class MoreRepositoryImplements implements MoreRepository {
     return Connector<bool>().connect(
       remote: () async {
         final result = await remote.uploadProfileImage(entity: entity);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<ApiFailure, bool>> editProfile({required EditProfileRequestEntity entity}) async {
+    return Connector<bool>().connect(
+      remote: () async {
+        final result = await remote.editProfile(entity: entity);
         return Right(result);
       },
     );

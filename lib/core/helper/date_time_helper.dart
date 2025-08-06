@@ -69,7 +69,7 @@ abstract class DateTimeHelper {
   static String formatDateWithDash({required DateTime? date}) {
     try {
       if (date == null) return "";
-      return DateFormat('d-M-yyyy').format(date.toLocal());
+      return DateFormat('yyyy-m-d').format(date.toLocal());
     } catch (e) {
       return '';
     }

@@ -73,6 +73,9 @@ class NewTripFormFields extends StatelessWidget {
               hint: "Trip Route".tr(),
               title: "Trip Route".tr(),
               options: tripRouteOptions,
+              onChanged: (value) {
+                TripRequestHelper.entity.routeId = value?.id;
+              } ,
             );
           },
         ),

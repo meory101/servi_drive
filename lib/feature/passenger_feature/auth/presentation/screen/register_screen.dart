@@ -352,7 +352,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Expanded(
                       child: TitleCalendarFormField(
-                        minDate: DateTime(DateTime.now().year - 18),
+                        minDate: DateTime(DateTime.now().year - 100),
+                        maxDate: DateTime(DateTime.now().year - 18),
                         title: "dateOfBirth".tr(),
                         onDateChanged: (p0) {
                           registerRequestEntity.dateOfBirth =

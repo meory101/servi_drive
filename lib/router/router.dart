@@ -13,8 +13,10 @@ import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/n
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/number_reset_password_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/register_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/edit_profile_cubit/edit_profile_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_state.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/edit_profile_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/my_trips_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
@@ -33,7 +35,7 @@ import '../core/injection/injection_container.dart' as di;
 import '../feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 
 abstract class RouteNamedScreens {
-  static String init = authIntro;
+  static String init = main;
   static const String main = "/main-bottom-app-bar";
   static const String myTrips = "/my-trips";
   static const String tripDetails = "/trip-details";
@@ -46,6 +48,7 @@ abstract class RouteNamedScreens {
   static const String numberResetPasswordScreen = "/number-reset-password";
   static const String verificationCode = "/verification-code";
   static const String resetPassword = "/reset-password";
+  static const String editProfile = "/edit-profile";
 }
 
 abstract class AppRouter {
@@ -61,26 +64,21 @@ abstract class AppRouter {
           page: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) =>
-                di.sl<UploadProfileImageCubit>()),
+                  create: (context) => di.sl<UploadProfileImageCubit>()),
               BlocProvider(
                 create: (context) =>
-                di.sl<TripRoutesCubit>()
-                  ..getTripRoutes(context: context),
+                    di.sl<TripRoutesCubit>()..getTripRoutes(context: context),
               ),
               BlocProvider(
                 create: (context) =>
-                di.sl<GetProfileCubit>()
-                  ..getProfile(context: context),
+                    di.sl<GetProfileCubit>()..getProfile(context: context),
               ),
               BlocProvider(
                 create: (context) =>
-                di.sl<ConditionsCubit>()
-                  ..getConditions(context: context),
+                    di.sl<ConditionsCubit>()..getConditions(context: context),
               ),
               BlocProvider(
-                create: (context) =>
-                    di.sl<NewTripCubit>(),
+                create: (context) => di.sl<NewTripCubit>(),
               )
             ],
             child: MainAppBottomAppBar(),
@@ -92,7 +90,6 @@ abstract class AppRouter {
           page: MyTripsScreen(),
         );
 
-
       case RouteNamedScreens.numberResendCodeScreen:
         CurrentRoute.currentRouteName =
             RouteNamedScreens.numberResendCodeScreen;
@@ -100,6 +97,23 @@ abstract class AppRouter {
           page: BlocProvider(
             create: (context) => di.sl<ResendOtpCubit>(),
             child: NumberResendCodeScreen(),
+          ),
+        );
+      case RouteNamedScreens.editProfile:
+        CurrentRoute.currentRouteName =
+            RouteNamedScreens.numberResendCodeScreen;
+        return FadeBuilderRoute(
+          page: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => di.sl<EditProfileCubit>(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    di.sl<GetProfileCubit>()..getProfile(context: context),
+              )
+            ],
+            child: EditProfileScreen(),
           ),
         );
 
@@ -114,8 +128,7 @@ abstract class AppRouter {
         );
       case RouteNamedScreens.resetPassword:
         argument as ResetPasswordArgs;
-        CurrentRoute.currentRouteName =
-            RouteNamedScreens.resetPassword;
+        CurrentRoute.currentRouteName = RouteNamedScreens.resetPassword;
         return FadeBuilderRoute(
           page: BlocProvider(
             create: (context) => di.sl<ResetPasswordCubit>(),

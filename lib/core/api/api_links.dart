@@ -28,5 +28,6 @@ class ApiDeleteUrl {
 }
 class ApiPutUrl {
   static String uploadProfileImage = "user/image";
+  static String editProfile = "user/profile";
 
 }

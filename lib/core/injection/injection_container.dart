@@ -19,11 +19,13 @@ import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/new_tr
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/trip_routes_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/more/domain/usecase/get_profile_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/more/domain/usecase/upload_profile_image_usecase.dart';
+import 'package:servi_drive/feature/passenger_feature/more/domain/usecase/edit_profile_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/edit_profile_cubit/edit_profile_cubit.dart';
 
 import '../../feature/passenger_feature/auth/data/datasource/remote/auth_remote.dart';
 import '../../feature/passenger_feature/auth/data/repository/auth_repository_implements.dart';
@@ -44,6 +46,7 @@ Future<void> init() async {
   sl.registerFactory(() => ResetPasswordCubit(usecase: sl()));
   sl.registerFactory(() => GetProfileCubit(usecase: sl()));
   sl.registerFactory(() => UploadProfileImageCubit(usecase: sl()));
+  sl.registerFactory(() => EditProfileCubit(usecase: sl()));
   sl.registerFactory(() => ConditionsCubit(usecase: sl()));
   sl.registerFactory(() => TripRoutesCubit(usecase: sl()));
   sl.registerFactory(() => NewTripCubit(usecase: sl()));
@@ -56,6 +59,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ResetPasswordUsecase(repository: sl()));
   sl.registerLazySingleton(() => GetProfileUsecase(repository: sl()));
   sl.registerLazySingleton(() => UploadProfileImageUsecase(repository: sl()));
+  sl.registerLazySingleton(() => EditProfileUsecase(repository: sl()));
   sl.registerLazySingleton(() => TripRoutesUsecase(repository: sl()));
   sl.registerLazySingleton(() => ConditionsUsecase(repository: sl()));
   sl.registerLazySingleton(() => NewTripUsecase(repository: sl()));

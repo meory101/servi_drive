@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:servi_drive/core/model/condition.dart';
 import 'package:servi_drive/core/resource/cubit_status_manager.dart';
 import 'package:servi_drive/core/widget/container/shimmer_container.dart';
+import 'package:servi_drive/core/widget/image/main_image_widget.dart';
 import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_state.dart';
@@ -14,6 +15,7 @@ import '../../../../../core/resource/color_manager.dart';
 import '../../../../../core/resource/icon_manager.dart';
 import '../../../../../core/resource/size_manager.dart';
 import '../../../../../core/widget/text/app_text_widget.dart';
+import '../screen/add_trip_screen.dart';
 
 class PreferredConditionsListView extends StatefulWidget {
   const PreferredConditionsListView({super.key});
@@ -51,7 +53,7 @@ class _PreferredConditionsListViewState
           child: SizedBox(
             height: AppHeightManager.h10,
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: conditions.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 bool isSelected = selectedFeatures.contains(index);
@@ -59,8 +61,10 @@ class _PreferredConditionsListViewState
                   onTap: () {
                     setState(() {
                       if (isSelected) {
+                        TripRequestHelper.entity.conditions?.remove(conditions[index].id??"");
                         selectedFeatures.remove(index);
                       } else {
+                        TripRequestHelper.entity.conditions?.add(conditions[index].id??"");
                         selectedFeatures.add(index);
                       }
                     });
@@ -95,15 +99,17 @@ class _PreferredConditionsListViewState
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
-                                height: AppHeightManager.h2point5,
-                                width: AppHeightManager.h2point5,
-                                child: SvgPicture.asset(AppIconManager.noSmoke)),
-                            SizedBox(
-                              height: AppHeightManager.h04,
-                            ),
+                            // SizedBox(
+                            //     height: AppHeightManager.h2point5,
+                            //     width: AppHeightManager.h2point5,
+                            //     child: MainImageWidget(
+                            //       imageUrl: conditions[index].,
+                            //     )),
+                            // SizedBox(
+                            //   height: AppHeightManager.h04,
+                            // ),
                             AppTextWidget(
-                              text: "No Smoking",
+                              text: conditions[index].name??"",
                               color: AppColorManager.darkMainColor,
                               fontWeight: FontWeight.w600,
                             )
