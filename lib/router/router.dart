@@ -28,9 +28,10 @@ import '../feature/passenger_feature/auth/presentation/screen/login_screen.dart'
 import '../feature/passenger_feature/auth/presentation/screen/reset_password_screen.dart';
 import '../feature/passenger_feature/main/presentation/screen/main_bottom_app_bar.dart';
 import '../core/injection/injection_container.dart' as di;
+import '../feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 
 abstract class RouteNamedScreens {
-  static String init = authIntro;
+  static String init = main;
   static const String main = "/main-bottom-app-bar";
   static const String myTrips = "/my-trips";
   static const String tripDetails = "/trip-details";
@@ -61,6 +62,11 @@ abstract class AppRouter {
                 create: (context) =>
                 di.sl<TripRoutesCubit>()
                   ..getTripRoutes(context: context),
+              ),
+              BlocProvider(
+                create: (context) =>
+                di.sl<GetProfileCubit>()
+                  ..getProfile(context: context),
               ),
               BlocProvider(
                 create: (context) =>

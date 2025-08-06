@@ -1,0 +1,11 @@
+import 'package:dartz/dartz.dart';
+import '../../../../../core/api/api_error/api_failures.dart';
+import '../entity/response/profile_response_entity.dart';
+
+///
+/// created by eng nour othman ***
+/// at 23/2/2025
+///
+abstract class MoreRepository {
+  Future<Either<ApiFailure, ProfileResponseEntity>> getProfile();
+}

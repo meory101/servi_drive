@@ -2,6 +2,7 @@ class ApiGetUrl {
 
   static String tripRoutes = "trip-routes";
   static String conditions = "preferred-conditions";
+  static String profile = "auth/profile";
 
 
 }

@@ -17,14 +17,19 @@ import 'package:servi_drive/feature/passenger_feature/trip/data/repository/trip_
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/conditions_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/new_trip_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/trip_routes_usecase.dart';
+import 'package:servi_drive/feature/passenger_feature/more/domain/usecase/get_profile_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 
 import '../../feature/passenger_feature/auth/data/datasource/remote/auth_remote.dart';
 import '../../feature/passenger_feature/auth/data/repository/auth_repository_implements.dart';
 import '../../feature/passenger_feature/auth/domain/repository/auth_repository.dart';
 import '../../feature/passenger_feature/trip/domain/repository/trip_repository.dart';
+import '../../feature/passenger_feature/more/data/repository/more_repository_implements.dart';
+import '../../feature/passenger_feature/more/domain/repository/more_repository.dart';
+import '../../feature/passenger_feature/more/data/datasource/remote/more_remote.dart';
 
 final sl = GetIt.instance;
 
@@ -35,6 +40,7 @@ Future<void> init() async {
   sl.registerFactory(() => ResendOtpCubit(usecase: sl()));
   sl.registerFactory(() => ForgotPasswordCubit(usecase: sl()));
   sl.registerFactory(() => ResetPasswordCubit(usecase: sl()));
+  sl.registerFactory(() => GetProfileCubit(usecase: sl()));
   sl.registerFactory(() => ConditionsCubit(usecase: sl()));
   sl.registerFactory(() => TripRoutesCubit(usecase: sl()));
   sl.registerFactory(() => NewTripCubit(usecase: sl()));
@@ -45,6 +51,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ResendOtpUsecase(repository: sl()));
   sl.registerLazySingleton(() => ForgotPasswordUsecase(repository: sl()));
   sl.registerLazySingleton(() => ResetPasswordUsecase(repository: sl()));
+  sl.registerLazySingleton(() => GetProfileUsecase(repository: sl()));
   sl.registerLazySingleton(() => TripRoutesUsecase(repository: sl()));
   sl.registerLazySingleton(() => ConditionsUsecase(repository: sl()));
   sl.registerLazySingleton(() => NewTripUsecase(repository: sl()));
@@ -62,7 +69,11 @@ Future<void> init() async {
   sl.registerLazySingleton<TripRepository>(
           () => TripRepositoryImplements(remote: sl()));
 
+  sl.registerLazySingleton<MoreRepository>(
+          () => MoreRepositoryImplements(remote: sl()));
+
 
   sl.registerLazySingleton<AuthRemote>(() => AuthRemoteImplement());
   sl.registerLazySingleton<TripRemote>(() => TripRemoteImplement());
+  sl.registerLazySingleton<MoreRemote>(() => MoreRemoteImplement());
 }
