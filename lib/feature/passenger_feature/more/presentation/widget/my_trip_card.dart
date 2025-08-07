@@ -2,10 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:servi_drive/core/model/trip_data.dart';
 import 'package:servi_drive/core/widget/button/slide_button.dart';
 import 'package:servi_drive/router/router.dart';
 
 import '../../../../../core/resource/color_manager.dart';
+import '../../../../../core/resource/enum_manager.dart';
 import '../../../../../core/resource/font_manager.dart';
 import '../../../../../core/resource/icon_manager.dart';
 import '../../../../../core/resource/image_manager.dart';
@@ -16,16 +18,19 @@ import '../../../../../core/widget/text/app_text_widget.dart';
 import '../../../../../core/widget/text/status_text.dart';
 
 class MyTripCard extends StatelessWidget {
-  final int index;
+  final TripData trip;
   final bool? isActiveTrip;
 
-  const MyTripCard({super.key, required this.index, this.isActiveTrip});
+  const MyTripCard({super.key, required this.trip, this.isActiveTrip});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(RouteNamedScreens.tripDetails);
+        Navigator.of(context).pushNamed(
+          RouteNamedScreens.tripDetails,
+          arguments: trip.id,
+        );
       },
       child: DecoratedContainer(
         margin: EdgeInsets.only(bottom: AppHeightManager.h1point8),
@@ -33,51 +38,45 @@ class MyTripCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(RouteNamedScreens.driverInfo);
-              },
-              child: Row(
-                children: [
-                  Container(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    height: AppWidthManager.w12,
-                    width: AppWidthManager.w12,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColorManager.darkMainColor,
-                    ),
-                    child: MainImageWidget(
-                      imagePath: AppImageManager.placeholder,
-                    ),
-                  ),
-                  SizedBox(width: AppWidthManager.w1Point8),
-                  AppTextWidget(
-                    text: "Driver Name",
-                    color: AppColorManager.darkMainColor,
-                    fontSize: FontSizeManager.fs16,
-                    fontWeight: FontWeight.w600,
-                  )
-                ],
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     Navigator.of(context).pushNamed(RouteNamedScreens.driverInfo);
+            //   },
+            //   child: Row(
+            //     children: [
+            //       Container(
+            //         clipBehavior: Clip.antiAliasWithSaveLayer,
+            //         height: AppWidthManager.w12,
+            //         width: AppWidthManager.w12,
+            //         decoration: BoxDecoration(
+            //           shape: BoxShape.circle,
+            //           color: AppColorManager.darkMainColor,
+            //         ),
+            //         child: MainImageWidget(
+            //           imagePath: AppImageManager.placeholder,
+            //         ),
+            //       ),
+            //       SizedBox(width: AppWidthManager.w1Point8),
+            //       AppTextWidget(
+            //         text: "Driver Name",
+            //         color: AppColorManager.darkMainColor,
+            //         fontSize: FontSizeManager.fs16,
+            //         fontWeight: FontWeight.w600,
+            //       )
+            //     ],
+            //   ),
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppTextWidget(
-                  text: "Damascus-Amman",
+                  text: trip.routeId?.routeName ?? "Unknown Route",
                   fontWeight: FontWeight.w700,
                   fontSize: FontSizeManager.fs17,
                 ),
                 StatusText(
-                    color: index == 0
-                        ? AppColorManager.red
-                        : index == 1
-                            ? AppColorManager.orange
-                            : index == 2
-                                ? AppColorManager.blue
-                                : AppColorManager.lightMainColor,
-                    text: "status")
+                    color: EnumManager.getTripStatusColor(trip.status),
+                    text: EnumManager.getTripStatusText(trip.status))
               ],
             ),
             SizedBox(
@@ -88,7 +87,7 @@ class MyTripCard extends StatelessWidget {
               children: [
                 // SvgPicture.asset(AppIconManager.calendar),
                 AppTextWidget(
-                  text: "3 Travellers",
+                  text: "${trip.numberOfTravelers ?? 0} Travellers",
                   fontWeight: FontWeight.w600,
                   fontSize: FontSizeManager.fs17,
                   color: AppColorManager.darkMainColor,
@@ -113,7 +112,7 @@ class MyTripCard extends StatelessWidget {
                 ),
 
                 AppTextWidget(
-                  text: "240\$",
+                  text: "\$${trip.budget ?? 0}",
                   fontWeight: FontWeight.w600,
                   fontSize: FontSizeManager.fs17,
                   color: AppColorManager.lightMainColor,
@@ -138,7 +137,7 @@ class MyTripCard extends StatelessWidget {
                         color: AppColorManager.darkMainColor,
                       ),
                       AppTextWidget(
-                        text: "33.33,34.55".tr(),
+                        text: "${trip.fromLat?.toStringAsFixed(2) ?? '0.00'}, ${trip.fromLng?.toStringAsFixed(2) ?? '0.00'}",
                         fontWeight: FontWeight.w600,
                         fontSize: FontSizeManager.fs15,
                         color: AppColorManager.grey,
@@ -155,7 +154,7 @@ class MyTripCard extends StatelessWidget {
                         color: AppColorManager.darkMainColor,
                       ),
                       AppTextWidget(
-                        text: "22.44,34.55",
+                        text: "${trip.toLat?.toStringAsFixed(2) ?? '0.00'}, ${trip.toLng?.toStringAsFixed(2) ?? '0.00'}",
                         fontWeight: FontWeight.w600,
                         fontSize: FontSizeManager.fs14,
                         color: AppColorManager.textGrey,
@@ -177,7 +176,7 @@ class MyTripCard extends StatelessWidget {
                         color: AppColorManager.darkMainColor,
                       ),
                       AppTextWidget(
-                        text: "Today".tr(),
+                        text: trip.tripDate ?? "Unknown Date",
                         fontWeight: FontWeight.w600,
                         fontSize: FontSizeManager.fs15,
                         color: AppColorManager.grey,
@@ -201,7 +200,7 @@ class MyTripCard extends StatelessWidget {
                         color: AppColorManager.darkMainColor,
                       ),
                       AppTextWidget(
-                        text: "1:20 Am",
+                        text: trip.tripTime ?? "Unknown Time",
                         fontWeight: FontWeight.w600,
                         fontSize: FontSizeManager.fs14,
                         color: AppColorManager.textGrey,

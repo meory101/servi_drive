@@ -9,12 +9,16 @@ class NewTripMap extends StatefulWidget {
   final bool isReadOnly;
   final LatLng? fromLocation;
   final LatLng? toLocation;
+  final Function(LatLng)? onFromLocationChanged;
+  final Function(LatLng)? onToLocationChanged;
 
   const NewTripMap({
     super.key,
     this.isReadOnly = false,
     this.fromLocation,
     this.toLocation,
+    this.onFromLocationChanged,
+    this.onToLocationChanged,
   });
 
   @override
@@ -65,9 +69,13 @@ class _NewTripMapState extends State<NewTripMap> {
         _startMarker = latLng;
         _endMarker = null;
         _selectingStart = false;
+        // Notify parent about from location change
+        widget.onFromLocationChanged?.call(latLng);
       } else if (_endMarker == null) {
         _endMarker = latLng;
         _selectingStart = true;
+        // Notify parent about to location change
+        widget.onToLocationChanged?.call(latLng);
       }
     });
   }

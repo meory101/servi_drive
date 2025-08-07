@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../helper/date_time_helper.dart';
 import '../../helper/language_helper.dart';
 import '../../resource/color_manager.dart';
 import '../../resource/font_manager.dart';
@@ -37,6 +38,7 @@ class _TitleTimeFormFieldState extends State<TitleTimeFormField> {
     final now = TimeOfDay.now();
     final picked = await showTimePicker(
       context: context,
+
       initialTime: widget.initialTime ?? now,
     );
     if (picked != null) {
@@ -49,10 +51,7 @@ class _TitleTimeFormFieldState extends State<TitleTimeFormField> {
 
   String getTimeText() {
     if (selectedTime != null) {
-      final hour = selectedTime!.hourOfPeriod.toString().padLeft(2, '0');
-      final minute = selectedTime!.minute.toString().padLeft(2, '0');
-      final period = selectedTime!.period == DayPeriod.am ? 'AM' : 'PM';
-      return '$hour:$minute $period';
+      return DateTimeHelper.formatTimeOfDayTo24Hour(selectedTime);
     }
     return widget.hint;
   }
@@ -112,6 +111,7 @@ class _TitleTimeFormFieldState extends State<TitleTimeFormField> {
                         AppColorManager.transparent),
                     onTap: showTimePickerDialog,
                     child: SvgPicture.asset(AppIconManager.clock,
+
                         colorFilter: ColorFilter.mode(
                             AppColorManager.lightMainColor, BlendMode.srcIn)),
                   ),

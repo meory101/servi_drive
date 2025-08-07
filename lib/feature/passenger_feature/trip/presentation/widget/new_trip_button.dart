@@ -15,7 +15,12 @@ import '../../../../../core/widget/text/app_text_widget.dart';
 import '../dialog/show_desc_budget_dialog.dart';
 
 class NewTripButton extends StatelessWidget {
-  const NewTripButton({super.key});
+  final VoidCallback? onValidationPassed;
+  
+  const NewTripButton({
+    super.key,
+    this.onValidationPassed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +37,11 @@ class NewTripButton extends StatelessWidget {
         }
         return MainAppButton(
           onTap: () {
-
-
-            showDescBudgetDialog(context: context);
+            if (onValidationPassed != null) {
+              onValidationPassed!();
+            } else {
+              showDescBudgetDialog(context: context);
+            }
           },
           height: AppHeightManager.h6,
           width: AppWidthManager.w100,

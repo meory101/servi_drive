@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:servi_drive/core/helper/date_time_helper.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
 import 'package:servi_drive/core/widget/container/drag_container.dart';
+import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/request/new_trip_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/widget/new_trip_button.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/widget/new_trip_form_fields.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/widget/new_trip_map.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/widget/prefered_conditions_list_view.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/dialog/show_desc_budget_dialog.dart';
 
 import '../../../../../core/resource/color_manager.dart';
 
@@ -28,11 +31,66 @@ class _AddTripScreenState extends State<AddTripScreen> {
   void initState() {
     TripRequestHelper.entity.conditions = [];
     TripRequestHelper.entity.luggageCount = 0;
-    TripRequestHelper.entity.numberOfTravelers =1;
+    TripRequestHelper.entity.numberOfTravelers = 1;
     travellers.text = travellerCount.toString();
     luggage.text = luggageCount.toString();
 
     super.initState();
+  }
+
+  bool validateRequiredFields() {
+    final entity = TripRequestHelper.entity;
+    
+    if (entity.routeId == null || entity.routeId!.isEmpty) {
+      NoteMessage.showErrorSnackBar(
+        context: context, 
+        text: "Please select a trip route"
+      );
+      return false;
+    }
+    
+    if (entity.tripDate == null || entity.tripDate!.isEmpty) {
+      NoteMessage.showErrorSnackBar(
+        context: context, 
+        text: "Please select a trip date"
+      );
+      return false;
+    }
+    
+    if (entity.tripTime == null || entity.tripTime!.isEmpty) {
+      NoteMessage.showErrorSnackBar(
+        context: context, 
+        text: "Please select a trip time"
+      );
+      return false;
+    }
+    
+    if (entity.numberOfTravelers == null || entity.numberOfTravelers! < 1) {
+      NoteMessage.showErrorSnackBar(
+        context: context, 
+        text: "Please select number of travelers"
+      );
+      return false;
+    }
+    
+    // Validate location coordinates
+    if (entity.fromLat == null || entity.fromLng == null) {
+      NoteMessage.showErrorSnackBar(
+        context: context, 
+        text: "Please select a starting location on the map"
+      );
+      return false;
+    }
+    
+    if (entity.toLat == null || entity.toLng == null) {
+      NoteMessage.showErrorSnackBar(
+        context: context, 
+        text: "Please select a destination location on the map"
+      );
+      return false;
+    }
+    
+    return true;
   }
 
   @override
@@ -43,7 +101,18 @@ class _AddTripScreenState extends State<AddTripScreen> {
           SizedBox(
             height: AppHeightManager.h100,
             width: AppWidthManager.w100,
-            child: NewTripMap(),
+            child: NewTripMap(
+              onFromLocationChanged: (LatLng latLng) {
+                TripRequestHelper.entity.fromLat = latLng.latitude;
+                TripRequestHelper.entity.fromLng = latLng.longitude;
+                print('From Location: ${latLng.latitude}, ${latLng.longitude}');
+              },
+              onToLocationChanged: (LatLng latLng) {
+                TripRequestHelper.entity.toLat = latLng.latitude;
+                TripRequestHelper.entity.toLng = latLng.longitude;
+                print('To Location: ${latLng.latitude}, ${latLng.longitude}');
+              },
+            ),
           ),
           DraggableScrollableSheet(
             initialChildSize: 0.9,
@@ -104,23 +173,27 @@ class _AddTripScreenState extends State<AddTripScreen> {
                               setState(() {
                                 travellerCount = count;
                                 travellers.text = travellerCount.toString();
-                                TripRequestHelper.entity.numberOfTravelers = travellerCount;
+                                TripRequestHelper.entity.numberOfTravelers =
+                                    travellerCount;
                               });
                             },
                             onLuggageCountChanged: (count) {
                               setState(() {
                                 luggageCount = count;
                                 luggage.text = luggageCount.toString();
-                                TripRequestHelper.entity.luggageCount = luggageCount;
-
+                                TripRequestHelper.entity.luggageCount =
+                                    luggageCount;
                               });
                             },
                             onDateChanged: (date) {
                               TripRequestHelper.entity.tripDate =
-                                  DateTimeHelper.formatDateWithDash(date: date);
+                                 date.toIso8601String();
                             },
                             onTimeChanged: (time) {
-                              // TripRequestHelper.entity.tripTime =time;
+                              print(time);
+                              print('------------------');
+                              TripRequestHelper.entity.tripTime =
+                                  DateTimeHelper.formatTimeOfDayTo24Hour(time);
                             },
                           ),
                         ),
@@ -137,7 +210,13 @@ class _AddTripScreenState extends State<AddTripScreen> {
                         SizedBox(
                           height: AppHeightManager.h3,
                         ),
-                        NewTripButton(),
+                        NewTripButton(
+                          onValidationPassed: () {
+                            if (validateRequiredFields()) {
+                              showDescBudgetDialog(context: context);
+                            }
+                          },
+                        ),
                         SizedBox(
                           height: AppHeightManager.h4,
                         ),

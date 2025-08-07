@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
+import 'package:servi_drive/core/model/trip_data.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/request/new_trip_request_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/conditions_response_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/trip_routes_response_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/my_trips_response_entity.dart';
 import '../../../../../core/api/api_error/api_failures.dart';
 import '../../../../../core/api/connector.dart';
 import '../../domain/repository/trip_repository.dart';
@@ -40,6 +42,26 @@ class TripRepositoryImplements implements TripRepository {
     return Connector<bool>().connect(
       remote: () async {
         final result = await remote.makeNewTrip(entity: entity);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<ApiFailure, MyTripsResponseEntity>> getMyTrips({required int page, required int limit}) async {
+    return Connector<MyTripsResponseEntity>().connect(
+      remote: () async {
+        final result = await remote.getMyTrips(page: page, limit: limit);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<ApiFailure, TripData>> getTripDetails({required String tripId}) async {
+    return Connector<TripData>().connect(
+      remote: () async {
+        final result = await remote.getTripDetails(tripId: tripId);
         return Right(result);
       },
     );

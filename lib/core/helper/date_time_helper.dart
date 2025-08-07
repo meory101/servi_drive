@@ -145,4 +145,11 @@ abstract class DateTimeHelper {
     final utcDateTime = localDateTime.toUtc();
     return utcDateTime.toIso8601String();
   }
+
+  static String formatTimeOfDayTo24Hour(TimeOfDay? timeOfDay) {
+    if (timeOfDay == null) return "";
+    final hour = timeOfDay.hour.toString().padLeft(2, '0');
+    final minute = timeOfDay.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
 }

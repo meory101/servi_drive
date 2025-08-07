@@ -77,6 +77,7 @@ void showDescBudgetDialog({required BuildContext context}) {
                                 title: "Do You Have Expected Price".tr(),
                                 textInputType: TextInputType.number,
                                 onChanged: (value) {
+                                  TripRequestHelper.entity.budget = num.parse(value??"0");
                                   return null;
                                 },
                                 validator: (value) {
@@ -98,6 +99,7 @@ void showDescBudgetDialog({required BuildContext context}) {
                                 title: "Description".tr(),
                                 multiLines: true,
                                 onChanged: (value) {
+                                  TripRequestHelper.entity.description = value;
                                   return null;
                                 },
                                 validator: (value) {

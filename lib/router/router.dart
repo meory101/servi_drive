@@ -19,8 +19,10 @@ import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/up
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/edit_profile_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/my_trips_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/my_trips_cubit/my_trips_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_details_cubit/trip_details_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/driver_info_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/trip_details_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/trip_offers_screen.dart';
@@ -87,7 +89,10 @@ abstract class AppRouter {
       case RouteNamedScreens.myTrips:
         CurrentRoute.currentRouteName = RouteNamedScreens.myTrips;
         return FadeBuilderRoute(
-          page: MyTripsScreen(),
+          page: BlocProvider(
+  create: (context) => di.sl<MyTripsCubit>()..getMyTrips(context: context),
+  child: MyTripsScreen(),
+),
         );
 
       case RouteNamedScreens.numberResendCodeScreen:
@@ -143,9 +148,16 @@ abstract class AppRouter {
           page: DriverInfoScreen(),
         );
       case RouteNamedScreens.tripDetails:
+        argument as String; // tripId
         CurrentRoute.currentRouteName = RouteNamedScreens.tripDetails;
         return FadeBuilderRoute(
-          page: TripDetailsScreen(),
+          page: BlocProvider(
+            create: (context) => di.sl<TripDetailsCubit>()..getTripDetails(
+              context: context,
+              tripId: argument,
+            ),
+            child: TripDetailsScreen(),
+          ),
         );
 
       case RouteNamedScreens.register:

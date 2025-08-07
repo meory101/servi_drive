@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:servi_drive/core/model/trip_data.dart';
 import 'package:servi_drive/core/resource/size_manager.dart';
 
 import '../../../more/presentation/widget/my_trip_card.dart';
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: AppWidthManager.w3Point8),
             child: MyTripCard(
-              index: 2,
+              trip: TripData(),
               isActiveTrip: true,
             ),
           ),
