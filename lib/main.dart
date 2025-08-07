@@ -14,8 +14,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
     await di.init();
-
-
   await PackageInfo.fromPlatform().then((value) {
     AppInfoHelper.packageInfo = value;
   });

@@ -4,6 +4,7 @@ import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/request
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/conditions_response_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/trip_routes_response_entity.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/my_trips_response_entity.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/domain/entity/response/trip_offers_response_entity.dart';
 import '../../../../../core/api/api_error/api_failures.dart';
 import '../../../../../core/api/connector.dart';
 import '../../domain/repository/trip_repository.dart';
@@ -58,10 +59,30 @@ class TripRepositoryImplements implements TripRepository {
   }
 
   @override
+  Future<Either<ApiFailure, TripOffersResponseEntity>> getTripOffers({required int page, required int limit, required String tripId}) async {
+    return Connector<TripOffersResponseEntity>().connect(
+      remote: () async {
+        final result = await remote.getTripOffers(page: page, limit: limit, tripId: tripId);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
   Future<Either<ApiFailure, TripData>> getTripDetails({required String tripId}) async {
     return Connector<TripData>().connect(
       remote: () async {
         final result = await remote.getTripDetails(tripId: tripId);
+        return Right(result);
+      },
+    );
+  }
+
+  @override
+  Future<Either<ApiFailure, TripData>> editTrip({required String tripId, required TripData tripData}) async {
+    return Connector<TripData>().connect(
+      remote: () async {
+        final result = await remote.editTrip(tripId: tripId, tripData: tripData);
         return Right(result);
       },
     );

@@ -19,9 +19,11 @@ import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/up
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/edit_profile_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/my_trips_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/edit_trip_cubit/edit_trip_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/my_trips_cubit/my_trips_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_offers_cubit/trip_offers_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_details_cubit/trip_details_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/driver_info_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/trip_details_screen.dart';
@@ -37,7 +39,7 @@ import '../core/injection/injection_container.dart' as di;
 import '../feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 
 abstract class RouteNamedScreens {
-  static String init = main;
+  static String init = login;
   static const String main = "/main-bottom-app-bar";
   static const String myTrips = "/my-trips";
   static const String tripDetails = "/trip-details";
@@ -66,18 +68,23 @@ abstract class AppRouter {
           page: MultiBlocProvider(
             providers: [
               BlocProvider(
+                  create: (context) => di.sl<MyTripsCubit>()..getMyTrips(context: context)),
+              BlocProvider(
                   create: (context) => di.sl<UploadProfileImageCubit>()),
               BlocProvider(
                 create: (context) =>
-                    di.sl<TripRoutesCubit>()..getTripRoutes(context: context),
+                di.sl<TripRoutesCubit>()
+                  ..getTripRoutes(context: context),
               ),
               BlocProvider(
                 create: (context) =>
-                    di.sl<GetProfileCubit>()..getProfile(context: context),
+                di.sl<GetProfileCubit>()
+                  ..getProfile(context: context),
               ),
               BlocProvider(
                 create: (context) =>
-                    di.sl<ConditionsCubit>()..getConditions(context: context),
+                di.sl<ConditionsCubit>()
+                  ..getConditions(context: context),
               ),
               BlocProvider(
                 create: (context) => di.sl<NewTripCubit>(),
@@ -90,9 +97,11 @@ abstract class AppRouter {
         CurrentRoute.currentRouteName = RouteNamedScreens.myTrips;
         return FadeBuilderRoute(
           page: BlocProvider(
-  create: (context) => di.sl<MyTripsCubit>()..getMyTrips(context: context),
-  child: MyTripsScreen(),
-),
+            create: (context) =>
+            di.sl<MyTripsCubit>()
+              ..getMyTrips(context: context),
+            child: MyTripsScreen(),
+          ),
         );
 
       case RouteNamedScreens.numberResendCodeScreen:
@@ -115,7 +124,8 @@ abstract class AppRouter {
               ),
               BlocProvider(
                 create: (context) =>
-                    di.sl<GetProfileCubit>()..getProfile(context: context),
+                di.sl<GetProfileCubit>()
+                  ..getProfile(context: context),
               )
             ],
             child: EditProfileScreen(),
@@ -151,11 +161,17 @@ abstract class AppRouter {
         argument as String; // tripId
         CurrentRoute.currentRouteName = RouteNamedScreens.tripDetails;
         return FadeBuilderRoute(
-          page: BlocProvider(
-            create: (context) => di.sl<TripDetailsCubit>()..getTripDetails(
-              context: context,
-              tripId: argument,
-            ),
+          page: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) =>
+              di.sl<TripDetailsCubit>()
+                ..getTripDetails(
+                  context: context,
+                  tripId: argument,
+                ),),
+              BlocProvider(create: (context) =>
+              di.sl<EditTripCubit>(),)
+            ],
             child: TripDetailsScreen(),
           ),
         );
@@ -197,9 +213,15 @@ abstract class AppRouter {
         );
 
       case RouteNamedScreens.tripOffers:
+        argument as TripOffersArgs;
         CurrentRoute.currentRouteName = RouteNamedScreens.tripOffers;
         return FadeBuilderRoute(
-          page: TripOffersScreen(),
+          page: BlocProvider(
+            create: (context) => di.sl<TripOffersCubit>(),
+            child: TripOffersScreen(
+              args: argument,
+            ),
+          ),
         );
 
       case RouteNamedScreens.authIntro:

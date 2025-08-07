@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:servi_drive/core/helper/date_time_helper.dart';
 import 'package:servi_drive/core/model/trip_data.dart';
 import 'package:servi_drive/core/widget/button/slide_button.dart';
 import 'package:servi_drive/router/router.dart';
@@ -70,7 +71,7 @@ class MyTripCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppTextWidget(
-                  text: trip.routeId?.routeName ?? "Unknown Route",
+                  text: trip.routeId?.routeName ?? "",
                   fontWeight: FontWeight.w700,
                   fontSize: FontSizeManager.fs17,
                 ),
@@ -176,7 +177,7 @@ class MyTripCard extends StatelessWidget {
                         color: AppColorManager.darkMainColor,
                       ),
                       AppTextWidget(
-                        text: trip.tripDate ?? "Unknown Date",
+                        text: DateTimeHelper.formatDateWithSlashBasedOnLang(date: trip.tripDate ?? ""),
                         fontWeight: FontWeight.w600,
                         fontSize: FontSizeManager.fs15,
                         color: AppColorManager.grey,

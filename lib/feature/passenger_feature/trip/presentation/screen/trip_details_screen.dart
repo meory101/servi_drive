@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:servi_drive/core/helper/date_time_helper.dart';
 import 'package:servi_drive/core/helper/language_helper.dart';
 import 'package:servi_drive/core/resource/font_manager.dart';
 import 'package:servi_drive/core/widget/text/app_text_widget.dart';
@@ -61,7 +62,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
         }
 
         final trip = state.trip!;
-        
+
         return Scaffold(
           body: Stack(
             children: [
@@ -70,8 +71,10 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                 width: AppWidthManager.w100,
                 child: NewTripMap(
                   isReadOnly: true,
-                  fromLocation: LatLng((trip.fromLat ?? 0).toDouble(), (trip.fromLng ?? 0).toDouble()),
-                  toLocation: LatLng((trip.toLat ?? 0).toDouble(), (trip.toLng ?? 0).toDouble()),
+                  fromLocation: LatLng((trip.fromLat ?? 0).toDouble(),
+                      (trip.fromLng ?? 0).toDouble()),
+                  toLocation: LatLng((trip.toLat ?? 0).toDouble(),
+                      (trip.toLng ?? 0).toDouble()),
                 ),
               ),
               Container(
@@ -84,17 +87,17 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                           ? AppWidthManager.w2
                           : 0),
                   child: InkWell(
-                    onTap:() {
+                    onTap: () {
                       Navigator.of(context).pop();
-                    } ,
+                    },
                     child: CircleAvatar(
                       backgroundColor: AppColorManager.lightMainColor,
                       child: SvgPicture.asset(
                         LanguageHelper.checkIfLTR(context: context)
                             ? AppIconManager.arrowMenuLeft
                             : AppIconManager.arrowMenuRight,
-                        colorFilter:
-                            ColorFilter.mode(AppColorManager.white, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(
+                            AppColorManager.white, BlendMode.srcIn),
                       ),
                     ),
                   )),
@@ -159,8 +162,10 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                 Row(
                                   children: [
                                     StatusText(
-                                        color: EnumManager.getTripStatusColor(trip.status),
-                                        text: EnumManager.getTripStatusText(trip.status)),
+                                        color: EnumManager.getTripStatusColor(
+                                            trip.status),
+                                        text: EnumManager.getTripStatusText(
+                                            trip.status)),
                                   ],
                                 ),
                                 SizedBox(
@@ -169,7 +174,8 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                 Row(
                                   children: [
                                     AppTextWidget(
-                                      text: "${trip.tripDate ?? ''} ${trip.tripTime ?? ''}",
+                                      text:
+                                          "${DateTimeHelper.formatDateWithSlashBasedOnLang(date: trip.tripDate ?? "") ?? ''} ${trip.tripTime ?? ''}",
                                       fontWeight: FontWeight.w500,
                                       fontSize: FontSizeManager.fs15,
                                       color: AppColorManager.textGrey,
@@ -188,7 +194,8 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     AppTextWidget(
-                                      text: "${trip.numberOfTravelers ?? 0} Travellers",
+                                      text:
+                                          "${trip.numberOfTravelers ?? 0} Travellers",
                                       fontWeight: FontWeight.w600,
                                       fontSize: FontSizeManager.fs16,
                                       color: AppColorManager.white,
@@ -203,12 +210,13 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                   ],
                                 ),
                                 Visibility(
-                                  visible: (trip.luggageCount ?? 0)!=0,
+                                  visible: (trip.luggageCount ?? 0) != 0,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       AppTextWidget(
-                                        text: "${trip.luggageCount ?? 0} Luggage ",
+                                        text:
+                                            "${trip.luggageCount ?? 0} Luggage ",
                                         fontWeight: FontWeight.w600,
                                         fontSize: FontSizeManager.fs16,
                                         color: AppColorManager.white,
@@ -225,39 +233,43 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                             SizedBox(
                               height: AppHeightManager.h6point6,
                             ),
-                            if (trip.conditions != null && trip.conditions!.isNotEmpty)
+                            if (trip.conditions != null &&
+                                trip.conditions!.isNotEmpty)
                               Column(
-                                children: trip.conditions!.map((condition) => 
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: AppHeightManager.h1),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                            height: AppHeightManager.h3,
-                                            width: AppHeightManager.h3,
-                                            child: SvgPicture.asset(
-                                              AppIconManager.noSmoke,
-                                              color: AppColorManager.white,
-                                            )),
-                                        SizedBox(
-                                          width: AppWidthManager.w3Point8,
-                                        ),
-                                        AppTextWidget(
-                                          text: condition.name ?? "Condition",
-                                          color: AppColorManager.white,
-                                          fontSize: FontSizeManager.fs16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ).toList(),
+                                children: trip.conditions!
+                                    .map((condition) => Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: AppHeightManager.h1),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                  height: AppHeightManager.h3,
+                                                  width: AppHeightManager.h3,
+                                                  child: SvgPicture.asset(
+                                                    AppIconManager.noSmoke,
+                                                    color:
+                                                        AppColorManager.white,
+                                                  )),
+                                              SizedBox(
+                                                width: AppWidthManager.w3Point8,
+                                              ),
+                                              AppTextWidget(
+                                                text: condition.name ??
+                                                    "Condition",
+                                                color: AppColorManager.white,
+                                                fontSize: FontSizeManager.fs16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ],
+                                          ),
+                                        ))
+                                    .toList(),
                               ),
                             SizedBox(
                               height: AppHeightManager.h4,
                             ),
                             TripDetailsBottomSheet(
-                              tripCode: trip.status ?? "0",
+                              tripData: trip,
                             )
                           ],
                         ),

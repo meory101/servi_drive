@@ -178,4 +178,7 @@ class TripData {
     return map;
   }
 
+  set status(String? value) {
+    _status = value;
+  }
 }

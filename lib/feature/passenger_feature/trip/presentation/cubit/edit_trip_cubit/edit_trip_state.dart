@@ -3,31 +3,31 @@ import 'package:servi_drive/core/model/trip_data.dart';
 
 import '../../../../../../core/resource/cubit_status_manager.dart';
 
-class TripDetailsState extends Equatable {
+class EditTripState extends Equatable {
   final String error;
   final CubitStatus status;
   final TripData? trip;
 
-  const TripDetailsState({
+  const EditTripState({
     required this.error,
     required this.status,
     this.trip,
   });
 
-  factory TripDetailsState.initial() {
-    return const TripDetailsState(
+  factory EditTripState.initial() {
+    return const EditTripState(
       error: '',
       status: CubitStatus.initial,
       trip: null,
     );
   }
 
-  TripDetailsState copyWith({
+  EditTripState copyWith({
     String? error,
     CubitStatus? status,
     TripData? trip,
   }) {
-    return TripDetailsState(
+    return EditTripState(
       error: error ?? this.error,
       status: status ?? this.status,
       trip: trip ?? this.trip,

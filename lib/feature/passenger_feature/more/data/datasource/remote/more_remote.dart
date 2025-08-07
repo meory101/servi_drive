@@ -36,7 +36,7 @@ class MoreRemoteImplement extends MoreRemote {
   @override
   Future<bool> uploadProfileImage({required UploadProfileImageRequestEntity entity}) async {
     final response =
-        await ApiMethods().patch(url: ApiPutUrl.uploadProfileImage, body: entity.toJson());
+        await ApiMethods().put(url: ApiPutUrl.uploadProfileImage, body: entity.toJson(), query: {});
 
     if (ApiStatusCode.success().contains(response.statusCode)) {
       return true;

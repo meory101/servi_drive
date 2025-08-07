@@ -5,6 +5,7 @@ import '../entity/request/new_trip_request_entity.dart';
 import '../entity/response/conditions_response_entity.dart';
 import '../entity/response/trip_routes_response_entity.dart';
 import '../entity/response/my_trips_response_entity.dart';
+import '../entity/response/trip_offers_response_entity.dart';
 
 ///
 /// created by eng nour othman ***
@@ -16,6 +17,8 @@ abstract class TripRepository {
   Future<Either<ApiFailure,PreferredConditionsResponseEntity>> getConditions();
   Future<Either<ApiFailure,bool>> makeNewTrip({required NewTripRequestEntity entity});
   Future<Either<ApiFailure,MyTripsResponseEntity>> getMyTrips({required int page, required int limit});
+  Future<Either<ApiFailure,TripOffersResponseEntity>> getTripOffers({required int page, required int limit, required String tripId});
   Future<Either<ApiFailure,TripData>> getTripDetails({required String tripId});
+  Future<Either<ApiFailure,TripData>> editTrip({required String tripId, required TripData tripData});
 
 }

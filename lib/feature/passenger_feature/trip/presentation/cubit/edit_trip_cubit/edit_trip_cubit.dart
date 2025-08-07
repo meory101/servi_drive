@@ -1,24 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/get_trip_details_usecase.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/edit_trip_usecase.dart';
+import 'package:servi_drive/core/model/trip_data.dart';
 import '../../../../../../core/api/api_error/api_error.dart';
 import '../../../../../../core/resource/cubit_status_manager.dart';
 import 'edit_trip_state.dart';
 
-class TripDetailsCubit extends Cubit<TripDetailsState> {
-  final GetTripDetailsUseCase usecase;
+class EditTripCubit extends Cubit<EditTripState> {
+  final EditTripUseCase usecase;
 
-  TripDetailsCubit({
+  EditTripCubit({
     required this.usecase,
-  }) : super(TripDetailsState.initial());
+  }) : super(EditTripState.initial());
 
-  void getTripDetails({
+  void editTrip({
     required BuildContext context,
     required String tripId,
+    required TripData tripData,
   }) async {
     emit(state.copyWith(status: CubitStatus.loading));
 
-    final result = await usecase(tripId: tripId);
+    final result = await usecase(tripId: tripId, tripData: tripData);
 
     if (isClosed) return;
 

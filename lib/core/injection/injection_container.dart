@@ -18,7 +18,9 @@ import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/condit
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/new_trip_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/trip_routes_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/get_my_trips_usecase.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/get_trip_offers_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/get_trip_details_usecase.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/domain/usecase/edit_trip_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/more/domain/usecase/get_profile_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/more/domain/usecase/upload_profile_image_usecase.dart';
 import 'package:servi_drive/feature/passenger_feature/more/domain/usecase/edit_profile_usecase.dart';
@@ -26,7 +28,9 @@ import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/co
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/my_trips_cubit/my_trips_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_offers_cubit/trip_offers_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_details_cubit/trip_details_cubit.dart';
+import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/edit_trip_cubit/edit_trip_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/edit_profile_cubit/edit_profile_cubit.dart';
@@ -55,7 +59,9 @@ Future<void> init() async {
   sl.registerFactory(() => TripRoutesCubit(usecase: sl()));
   sl.registerFactory(() => NewTripCubit(usecase: sl()));
   sl.registerFactory(() => MyTripsCubit(usecase: sl()));
+  sl.registerFactory(() => TripOffersCubit(usecase: sl()));
   sl.registerFactory(() => TripDetailsCubit(usecase: sl()));
+  sl.registerFactory(() => EditTripCubit(usecase: sl()));
 
   sl.registerLazySingleton(() => RegisterUsecase(repository: sl()));
   sl.registerLazySingleton(() => LoginUsecase(repository: sl()));
@@ -70,7 +76,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ConditionsUsecase(repository: sl()));
   sl.registerLazySingleton(() => NewTripUsecase(repository: sl()));
   sl.registerLazySingleton(() => GetMyTripsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetTripOffersUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetTripDetailsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => EditTripUseCase(repository: sl()));
 
   // Services
   sl.registerLazySingleton(() => AuthService(

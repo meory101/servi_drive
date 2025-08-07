@@ -340,7 +340,7 @@ class ApiMethods {
     // Print request log
     _printLog('PATCH', finalUri.toString(), headers, body, null);
 
-    final response = await http.put(finalUri,
+    final response = await http.patch(finalUri,
         body: body != null ? jsonEncode(body) : null, headers: headers);
 
     // Print response log
@@ -348,4 +348,8 @@ class ApiMethods {
 
     return response;
   }
+
+
+
+
 }
