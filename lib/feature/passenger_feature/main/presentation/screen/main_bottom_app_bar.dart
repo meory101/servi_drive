@@ -43,7 +43,7 @@ class _MainAppBottomAppBarState extends State<MainAppBottomAppBar> {
   ];
 
   final labelList = <String>[
-    'home'.tr(),
+    'driver_home'.tr(),
     'more'.tr(),
   ];
 

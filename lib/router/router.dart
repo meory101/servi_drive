@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:servi_drive/core/navigation/slid_left_builder_route.dart';
 import 'package:servi_drive/core/storage/shared/shared_pref.dart';
+import 'package:servi_drive/feature/driver_feature/driver_home/presentation/screen/driver_home_screen.dart';
+import 'package:servi_drive/feature/driver_feature/driver_home/presentation/cubit/driver_home_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/resend_otp_cubit/resend_otp_cubit.dart';
@@ -15,7 +17,7 @@ import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/r
 import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/edit_profile_cubit/edit_profile_cubit.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_state.dart';
+// removed unused upload_profile_image_state import
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/edit_profile_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/my_trips_screen.dart';
 import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
@@ -39,7 +41,7 @@ import '../core/injection/injection_container.dart' as di;
 import '../feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
 
 abstract class RouteNamedScreens {
-  static String init = login;
+  static String init = driverHome;
   static const String main = "/main-bottom-app-bar";
   static const String myTrips = "/my-trips";
   static const String tripDetails = "/trip-details";
@@ -53,6 +55,7 @@ abstract class RouteNamedScreens {
   static const String verificationCode = "/verification-code";
   static const String resetPassword = "/reset-password";
   static const String editProfile = "/edit-profile";
+  static const String driverHome = "/driver-home";
 }
 
 abstract class AppRouter {
@@ -101,6 +104,23 @@ abstract class AppRouter {
             di.sl<MyTripsCubit>()
               ..getMyTrips(context: context),
             child: MyTripsScreen(),
+          ),
+        );
+      case RouteNamedScreens.driverHome:
+        CurrentRoute.currentRouteName = RouteNamedScreens.driverHome;
+        return FadeBuilderRoute(
+          page: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    di.sl<GetProfileCubit>()..getProfile(context: context),
+              ),
+              BlocProvider(
+                create: (context) => di.sl<DriverHomeCubit>()
+                  ..fetchAvailableTrips(context: context, isUrgent: true, status: const [1, 2]),
+              ),
+            ],
+            child: DriverHomeScreen(),
           ),
         );
 

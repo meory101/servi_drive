@@ -19,7 +19,6 @@ void main() async {
   });
   SharedPreferences shPref = await SharedPreferences.getInstance();
   AppSharedPreferences.init(shPref);
-
   runApp(
     EasyLocalization(
       supportedLocales: const [

@@ -42,6 +42,7 @@ import '../../feature/passenger_feature/trip/domain/repository/trip_repository.d
 import '../../feature/passenger_feature/more/data/repository/more_repository_implements.dart';
 import '../../feature/passenger_feature/more/domain/repository/more_repository.dart';
 import '../../feature/passenger_feature/more/data/datasource/remote/more_remote.dart';
+import 'package:servi_drive/feature/driver_feature/driver_home/presentation/cubit/driver_home_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -62,6 +63,7 @@ Future<void> init() async {
   sl.registerFactory(() => TripOffersCubit(usecase: sl()));
   sl.registerFactory(() => TripDetailsCubit(usecase: sl()));
   sl.registerFactory(() => EditTripCubit(usecase: sl()));
+  sl.registerFactory(() => DriverHomeCubit());
 
   sl.registerLazySingleton(() => RegisterUsecase(repository: sl()));
   sl.registerLazySingleton(() => LoginUsecase(repository: sl()));

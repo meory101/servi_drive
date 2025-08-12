@@ -49,7 +49,8 @@ class AuthRemoteImplement extends AuthRemote {
   Future<LoginResponseEntity> login({required LoginRequestEntity entity}) async{
     final response =
     await ApiMethods().post(url: ApiPostUrl.login,body: entity.toJson());
-
+    print(response.body);
+    print('------------------------');
     if (ApiStatusCode.success().contains(response.statusCode)) {
       return loginResponseEntityFromJson(response.body);
     }

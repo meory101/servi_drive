@@ -7,6 +7,7 @@ class ApiGetUrl {
   static String tripDetails = "trip-requests";
   static String editTrip = "trip-requests";
   static String tripOffers = "offers/trip";
+  static String availableTrips = "trip-requests/available";
 
 
 }
