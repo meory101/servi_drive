@@ -61,10 +61,10 @@ class _PreferredConditionsListViewState
                   onTap: () {
                     setState(() {
                       if (isSelected) {
-                        TripRequestHelper.entity.conditions?.remove(conditions[index].id??"");
+                        TripRequestHelper.entity.conditions?.remove(conditions[index].name??"");
                         selectedFeatures.remove(index);
                       } else {
-                        TripRequestHelper.entity.conditions?.add(conditions[index].id??"");
+                        TripRequestHelper.entity.conditions?.add(conditions[index].name??"");
                         selectedFeatures.add(index);
                       }
                     });

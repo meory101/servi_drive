@@ -10,6 +10,9 @@ import '../core/injection/injection_container.dart' as di;
 import '../core/storage/shared/shared_pref.dart';
 
 
+/// nour othman ***
+/// created at
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
