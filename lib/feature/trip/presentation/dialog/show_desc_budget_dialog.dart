@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:servi_drive/core/resource/cubit_status_manager.dart';
 import 'package:servi_drive/core/widget/container/shimmer_container.dart';
 import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
+import 'package:servi_drive/feature/trip/domain/entity/request/new_trip_request_entity.dart';
 import 'package:servi_drive/router/router.dart';
 import '../../../../../core/resource/color_manager.dart';
 import '../../../../../core/resource/font_manager.dart';
@@ -147,6 +148,7 @@ void showDescBudgetDialog({required BuildContext context}) {
                                     }
                                     if (state.status == CubitStatus.success) {
                                       currentIndex =0;
+                                      TripRequestHelper.entity =NewTripRequestEntity();
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
                                           RouteNamedScreens.main, (route) => false,);

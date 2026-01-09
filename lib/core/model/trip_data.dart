@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:servi_drive/core/model/trip_route.dart';
@@ -8,6 +7,7 @@ import 'condition.dart';
 
 TripData tripDataFromJson(String str) => TripData.fromJson(json.decode(str));
 String dataToJson(TripData data) => json.encode(data.toJson());
+
 class TripData {
   TripData({
     String? id,
@@ -24,10 +24,11 @@ class TripData {
     num? luggageCount,
     String? status,
     bool? isUrgent,
-    List<PreferredCondition>? conditions,
+    List<String>? conditions,
     String? createdAt,
     String? updatedAt,
-    num? v,}){
+    num? v,
+  }) {
     _id = id;
     _passengerId = passengerId;
     _routeId = routeId;
@@ -49,9 +50,13 @@ class TripData {
   }
 
   TripData.fromJson(dynamic json) {
+    print(json);
+    print('---------------------------------');
     _id = json['_id'];
-    _passengerId = json['passengerId'] != null ? User.fromJson(json['passengerId']) : null;
-    _routeId = json['routeId'] != null ? TripRoute.fromJson(json['routeId']) : null;
+    _passengerId =
+        json['passengerId'] != null ? User.fromJson(json['passengerId']) : null;
+    _routeId =
+        json['routeId'] != null ? TripRoute.fromJson(json['routeId']) : null;
     _fromLat = json['fromLat'];
     _fromLng = json['fromLng'];
     _toLat = json['toLat'];
@@ -63,14 +68,29 @@ class TripData {
     _luggageCount = json['luggageCount'];
     _status = json['status'];
     _isUrgent = json['isUrgent'];
-    // if (json['conditions'] != null) {
-    //   _conditions = [];
-    //   print( json['conditions']);
-    //   print('ffffffffffffffffffffff');
-    //   json['conditions'].forEach((v) {
-    //     _conditions?.add(PreferredCondition.fromJson(v));
-    //   });
-    // }
+    if (json['conditions'] != null) {
+      _conditions = [];
+      if (json['conditions'] is List) {
+        print(
+            'Conditions is a List with ${(json['conditions'] as List).length} items');
+        json['conditions'].forEach((v) {
+          print('Processing condition item: $v');
+          try {
+            _conditions?.add(v);
+          } catch (e) {
+            print('Error parsing condition: $e');
+          }
+        });
+        print('Total conditions parsed: ${_conditions?.length}');
+      } else {
+        print('ERROR: Conditions is not a List!');
+      }
+      print('======================================');
+    } else {
+      print('========== CONDITIONS DEBUG ==========');
+      print('Conditions field is NULL in JSON');
+      print('======================================');
+    }
     _createdAt = json['createdAt'];
     _updatedAt = json['updatedAt'];
     _v = json['__v'];
@@ -89,11 +109,12 @@ class TripData {
   num? _luggageCount;
   String? _status;
   bool? _isUrgent;
-  List<PreferredCondition>? _conditions;
+  List<String>? _conditions;
   String? _createdAt;
   String? _updatedAt;
   num? _v;
-  TripData copyWith({  String? id,
+  TripData copyWith({
+    String? id,
     User? passengerId,
     TripRoute? routeId,
     num? fromLat,
@@ -107,29 +128,31 @@ class TripData {
     num? luggageCount,
     String? status,
     bool? isUrgent,
-    List<PreferredCondition>? conditions,
+    List<String>? conditions,
     String? createdAt,
     String? updatedAt,
     num? v,
-  }) => TripData(  id: id ?? _id,
-    passengerId: passengerId ?? _passengerId,
-    routeId: routeId ?? _routeId,
-    fromLat: fromLat ?? _fromLat,
-    fromLng: fromLng ?? _fromLng,
-    toLat: toLat ?? _toLat,
-    toLng: toLng ?? _toLng,
-    numberOfTravelers: numberOfTravelers ?? _numberOfTravelers,
-    tripDate: tripDate ?? _tripDate,
-    tripTime: tripTime ?? _tripTime,
-    budget: budget ?? _budget,
-    luggageCount: luggageCount ?? _luggageCount,
-    status: status ?? _status,
-    isUrgent: isUrgent ?? _isUrgent,
-    conditions: conditions ?? _conditions,
-    createdAt: createdAt ?? _createdAt,
-    updatedAt: updatedAt ?? _updatedAt,
-    v: v ?? _v,
-  );
+  }) =>
+      TripData(
+        id: id ?? _id,
+        passengerId: passengerId ?? _passengerId,
+        routeId: routeId ?? _routeId,
+        fromLat: fromLat ?? _fromLat,
+        fromLng: fromLng ?? _fromLng,
+        toLat: toLat ?? _toLat,
+        toLng: toLng ?? _toLng,
+        numberOfTravelers: numberOfTravelers ?? _numberOfTravelers,
+        tripDate: tripDate ?? _tripDate,
+        tripTime: tripTime ?? _tripTime,
+        budget: budget ?? _budget,
+        luggageCount: luggageCount ?? _luggageCount,
+        status: status ?? _status,
+        isUrgent: isUrgent ?? _isUrgent,
+        conditions: conditions ?? _conditions,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        v: v ?? _v,
+      );
   String? get id => _id;
   User? get passengerId => _passengerId;
   TripRoute? get routeId => _routeId;
@@ -139,7 +162,7 @@ class TripData {
   num? get toLng => _toLng;
   num? get numberOfTravelers => _numberOfTravelers;
   String? get tripDate => _tripDate;
-  List<PreferredCondition>? get conditions => _conditions;
+  List<String>? get conditions => _conditions;
   String? get tripTime => _tripTime;
   num? get budget => _budget;
   num? get luggageCount => _luggageCount;
@@ -169,9 +192,9 @@ class TripData {
     map['luggageCount'] = _luggageCount;
     map['status'] = _status;
     map['isUrgent'] = _isUrgent;
-    if (_conditions != null) {
-      map['conditions'] = _conditions?.map((v) => v.toJson()).toList();
-    }
+    // if (_conditions != null) {
+    //   map['conditions'] = _conditions?.map((v) => v.toJson()).toList();
+    // }
     map['createdAt'] = _createdAt;
     map['updatedAt'] = _updatedAt;
     map['__v'] = _v;

@@ -43,78 +43,82 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(title: "My Trips".tr()),
-      body: BlocConsumer<MyTripsCubit, MyTripsState>(
-        listener: (context, state) {
-          if (state.status == CubitStatus.error) {
-            NoteMessage.showErrorSnackBar(
-              context: context,
-              text: state.error,
-            );
-          }
-        },
-        builder: (context, state) {
-          if (state.status == CubitStatus.loading && state.trips.isEmpty) {
-            return const Center(
-              child: AppCircularProgressWidget(),
-            );
-          }
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Scaffold(
+        appBar: MainAppBar(title: "My Trips".tr()),
+        body: BlocConsumer<MyTripsCubit, MyTripsState>(
+          listener: (context, state) {
+            if (state.status == CubitStatus.error) {
+              NoteMessage.showErrorSnackBar(
+                context: context,
+                text: state.error,
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state.status == CubitStatus.loading && state.trips.isEmpty) {
+              return const Center(
+                child: AppCircularProgressWidget(),
+              );
+            }
 
-          if (state.trips.isEmpty && state.status == CubitStatus.success) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.directions_car_outlined,
-                    size: 64,
-                    color: Colors.grey[400],
-                  ),
-                  SizedBox(height: AppHeightManager.h2),
-                  Text(
-                    "No trips found".tr(),
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
+            if (state.trips.isEmpty && state.status == CubitStatus.success) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.directions_car_outlined,
+                      size: 64,
+                      color: Colors.grey[400],
                     ),
-                  ),
-                ],
+                    SizedBox(height: AppHeightManager.h2),
+                    Text(
+                      "No trips found".tr(),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            final showBottomLoader = state.status == CubitStatus.loading &&
+                state.trips.isNotEmpty &&
+                !state.hasReachedMax;
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<MyTripsCubit>().refreshTrips(context: context);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppWidthManager.w3Point8),
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: EdgeInsets.zero,
+                  itemCount: state.trips.length + (showBottomLoader ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == state.trips.length && showBottomLoader) {
+                      return Padding(
+                        padding: EdgeInsets.all(AppHeightManager.h2),
+                        child: const Center(
+                          child: AppCircularProgressWidget(),
+                        ),
+                      );
+                    }
+
+                    final trip = state.trips[index];
+                    return MyTripCard(trip: trip);
+                  },
+                ),
               ),
             );
-          }
-
-          final showBottomLoader = state.status == CubitStatus.loading && 
-              state.trips.isNotEmpty && 
-              !state.hasReachedMax;
-
-          return RefreshIndicator(
-            onRefresh: () async {
-              context.read<MyTripsCubit>().refreshTrips(context: context);
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppWidthManager.w3Point8),
-              child: ListView.builder(
-                controller: scrollController,
-                padding: EdgeInsets.zero,
-                itemCount: state.trips.length + (showBottomLoader ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index == state.trips.length && showBottomLoader) {
-                    return Padding(
-                      padding: EdgeInsets.all(AppHeightManager.h2),
-                      child: const Center(
-                        child: AppCircularProgressWidget(),
-                      ),
-                    );
-                  }
-
-                  final trip = state.trips[index];
-                  return MyTripCard(trip: trip);
-                },
-              ),
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }

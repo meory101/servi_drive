@@ -1,20 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:servi_drive/core/resource/cubit_status_manager.dart';
-import 'package:servi_drive/core/widget/container/shimmer_container.dart';
-import 'package:servi_drive/core/widget/snack_bar/note_message.dart';
 import 'package:servi_drive/router/router.dart';
 import 'package:servi_drive/core/model/trip_data.dart';
 
 import '../../../../../core/resource/color_manager.dart';
-import '../../../../../core/resource/enum_manager.dart';
 import '../../../../../core/resource/font_manager.dart';
 import '../../../../../core/resource/size_manager.dart';
 import '../../../../../core/widget/button/main_app_button.dart';
 import '../../../../../core/widget/text/app_text_widget.dart';
-import '../cubit/edit_trip_cubit/edit_trip_cubit.dart';
-import '../cubit/edit_trip_cubit/edit_trip_state.dart';
+import '../dialog/show_close_trip_confirmation_dialog.dart';
 import '../screen/trip_offers_screen.dart';
 
 class PendingTripActions extends StatelessWidget {
@@ -54,36 +48,25 @@ class PendingTripActions extends StatelessWidget {
           width: AppWidthManager.w3Point8,
         ),
         Expanded(
-          child: BlocConsumer<EditTripCubit, EditTripState>(
-            listener: (context, state) {
-              if(state.status == CubitStatus.error){
-                NoteMessage.showErrorSnackBar(context: context, text: state.error);
-              }
-            },
-            builder: (context, state) {
-              if(state.status ==CubitStatus.loading){
-                return ShimmerContainer(width: AppWidthManager.w100, height: AppHeightManager.h6point6);
-              }
-              return MainAppButton(
-                padding: EdgeInsets.symmetric(horizontal: AppWidthManager.w10),
-                borderRadius: BorderRadius.circular(AppRadiusManager.r15),
-                height: AppHeightManager.h6point6,
-                onTap: () {
-                  tripData.status = EnumManager.canceledTripCode;
-                  context.read<EditTripCubit>().editTrip(
-                      context: context, tripId: tripData.id??"" , tripData: tripData);
-                },
-                outLinedBorde: true,
-                color: AppColorManager.darkMainColor,
-                borderColor: AppColorManager.mainColor,
-                alignment: Alignment.center,
-                child: AppTextWidget(
-                  text: "Close Trip".tr(),
-                  fontSize: FontSizeManager.fs16,
-                  color: AppColorManager.mainColor,
-                ),
+          child: MainAppButton(
+            padding: EdgeInsets.symmetric(horizontal: AppWidthManager.w10),
+            borderRadius: BorderRadius.circular(AppRadiusManager.r15),
+            height: AppHeightManager.h6point6,
+            onTap: () {
+              showCloseTripConfirmationDialog(
+                context: context,
+                tripData: tripData,
               );
             },
+            outLinedBorde: true,
+            color: AppColorManager.darkMainColor,
+            borderColor: AppColorManager.mainColor,
+            alignment: Alignment.center,
+            child: AppTextWidget(
+              text: "Close Trip".tr(),
+              fontSize: FontSizeManager.fs16,
+              color: AppColorManager.mainColor,
+            ),
           ),
         ),
       ],
