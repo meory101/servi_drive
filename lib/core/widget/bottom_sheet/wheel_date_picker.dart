@@ -15,7 +15,6 @@ void showWheelDatePicker({
   DateTime? maximumDate,
   required Function(DateTime) onDateSelected,
 }) {
-  // نضبط التاريخ المبدئي حسب الحدود (إن وجدت)
   final DateTime initial = () {
     if (initialDateTime != null) {
       if (minimumDate != null && initialDateTime.isBefore(minimumDate)) {
@@ -26,7 +25,6 @@ void showWheelDatePicker({
       }
       return initialDateTime;
     } else {
-      // إذا لم يتم تمرير تاريخ مبدئي، نستخدم اليوم أو الحد الأقصى إن وجد
       final now = DateTime.now();
       if (maximumDate != null && now.isAfter(maximumDate)) {
         return maximumDate;
@@ -44,79 +42,83 @@ void showWheelDatePicker({
     context: context,
     backgroundColor: AppColorManager.white,
     builder: (BuildContext builder) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadiusManager.r10),
-          color: AppColorManager.white,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              alignment: Alignment.center,
-              height: AppHeightManager.h30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppRadiusManager.r10),
-                color: AppColorManager.white,
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppWidthManager.w5),
-                child: CupertinoDatePicker(
-                  initialDateTime: initial,
-                  onDateTimeChanged: (DateTime pickedDate) {
-                    selectedDate = pickedDate;
-                  },
-                  itemExtent: AppHeightManager.h5,
-                  mode: CupertinoDatePickerMode.date,
-                  minimumDate: minimumDate,
-                  maximumDate: maximumDate,
-                  use24hFormat: true,
-                ),
-              ),
-            ),
-            SizedBox(height: AppHeightManager.h2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MainAppButton(
-                  width: MediaQuery.of(context).size.width / 2.6,
+      return SafeArea(
+        top: false,
+        bottom: true,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppRadiusManager.r10),
+            color: AppColorManager.white,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: AppHeightManager.h30,
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppRadiusManager.r10),
-                  height: AppHeightManager.h5,
-                  onTap: () {
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd', 'en_US').format(selectedDate);
-                    DateTime finalDate = DateTime.parse(formattedDate);
-                    onDateSelected(finalDate);
-                    Navigator.of(context).pop();
-                  },
-                  color: AppColorManager.mainColor,
-                  alignment: Alignment.center,
-                  child: AppTextWidget(
-                    text: "save".tr(),
-                    fontSize: FontSizeManager.fs16,
-                    color: AppColorManager.white,
-                  ),
-                ),
-                SizedBox(width: AppWidthManager.w2),
-                MainAppButton(
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  borderRadius: BorderRadius.circular(AppRadiusManager.r10),
-                  height: AppHeightManager.h5,
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
                   color: AppColorManager.white,
-                  alignment: Alignment.center,
-                  child: AppTextWidget(
-                    text: "cancel".tr(),
-                    fontSize: FontSizeManager.fs16,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppWidthManager.w5),
+                  child: CupertinoDatePicker(
+                    initialDateTime: initial,
+                    onDateTimeChanged: (DateTime pickedDate) {
+                      selectedDate = pickedDate;
+                    },
+                    itemExtent: AppHeightManager.h5,
+                    mode: CupertinoDatePickerMode.date,
+                    minimumDate: minimumDate,
+                    maximumDate: maximumDate,
+                    use24hFormat: true,
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: AppHeightManager.h2),
-          ],
+              ),
+              SizedBox(height: AppHeightManager.h2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MainAppButton(
+                    width: MediaQuery.of(context).size.width / 2.6,
+                    borderRadius: BorderRadius.circular(AppRadiusManager.r10),
+                    height: AppHeightManager.h5,
+                    onTap: () {
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd', 'en_US').format(selectedDate);
+                      DateTime finalDate = DateTime.parse(formattedDate);
+                      onDateSelected(finalDate);
+                      Navigator.of(context).pop();
+                    },
+                    color: AppColorManager.mainColor,
+                    alignment: Alignment.center,
+                    child: AppTextWidget(
+                      text: "save".tr(),
+                      fontSize: FontSizeManager.fs16,
+                      color: AppColorManager.white,
+                    ),
+                  ),
+                  SizedBox(width: AppWidthManager.w2),
+                  MainAppButton(
+                    width: MediaQuery.of(context).size.width / 2.6,
+                    borderRadius: BorderRadius.circular(AppRadiusManager.r10),
+                    height: AppHeightManager.h5,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    color: AppColorManager.white,
+                    alignment: Alignment.center,
+                    child: AppTextWidget(
+                      text: "cancel".tr(),
+                      fontSize: FontSizeManager.fs16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppHeightManager.h2),
+            ],
+          ),
         ),
       );
     },

@@ -6,7 +6,7 @@ abstract class AppColorManager {
   static const Color lightMainColor = Color(0xFF2DBE60);
   static const Color background = Color(0xFFF8F9FA);
   static const Color mainGreyColor = Color(0xffEFF4F5);
-  static const Color mainColor = Color(0xFF2DBE60);
+    static const Color mainColor = Color(0xFF2DBE60);
   static  Color gradientColor = Color(0xFF2DBE60).withOpacity(0.9);
 
   // static const Color mainColor = Color(0xff624099);

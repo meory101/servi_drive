@@ -5,7 +5,7 @@ abstract class AppIconManager {
   static const String arrowRight = '$_iconBasePath/arrow_right.svg';
   static const String arrowLeft = '$_iconBasePath/arrow_left.svg';
   static const String person = '$_iconBasePath/person.svg';
-  static const String home = '$_iconBasePath/driver_home.svg';
+  static const String home = '$_iconBasePath/home.svg';
   static const String warning = '$_iconBasePath/warning.svg';
   static const String done = '$_iconBasePath/done.svg';
   static const String add = '$_iconBasePath/add.svg';

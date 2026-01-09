@@ -1,61 +1,55 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:servi_drive/core/navigation/slid_left_builder_route.dart';
 import 'package:servi_drive/core/storage/shared/shared_pref.dart';
-import 'package:servi_drive/feature/driver_feature/driver_home/presentation/screen/driver_home_screen.dart';
-import 'package:servi_drive/feature/driver_feature/driver_home/presentation/cubit/driver_home_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/login/login_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/register_cubit/register_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/resend_otp_cubit/resend_otp_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/reset_password_cubit/reset_password_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/auth_intro_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/number_resend_code_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/number_reset_password_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/register_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/auth/presentation/screen/verification_code_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/edit_profile_cubit/edit_profile_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
-// removed unused upload_profile_image_state import
-import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/edit_profile_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/more/presentation/screen/my_trips_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/edit_trip_cubit/edit_trip_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/my_trips_cubit/my_trips_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_offers_cubit/trip_offers_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/cubit/trip_details_cubit/trip_details_cubit.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/driver_info_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/trip_details_screen.dart';
-import 'package:servi_drive/feature/passenger_feature/trip/presentation/screen/trip_offers_screen.dart';
-
+import 'package:servi_drive/feature/intro/screen/splash_screen.dart';
+import '../core/injection/injection_container.dart' as di;
 import '../core/navigation/fade_builder_route.dart';
 import '../core/navigation/slid_up_builder_route.dart';
-import '../feature/passenger_feature/auth/presentation/cubit/forgot_password_cubit/forgot_password_cubit.dart';
-import '../feature/passenger_feature/auth/presentation/screen/login_screen.dart';
-import '../feature/passenger_feature/auth/presentation/screen/reset_password_screen.dart';
-import '../feature/passenger_feature/main/presentation/screen/main_bottom_app_bar.dart';
-import '../core/injection/injection_container.dart' as di;
-import '../feature/passenger_feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
+import '../feature/auth/presentation/cubit/forgot_password_cubit/forgot_password_cubit.dart';
+import '../feature/auth/presentation/cubit/login/login_cubit.dart';
+import '../feature/auth/presentation/cubit/register_cubit/register_cubit.dart';
+import '../feature/auth/presentation/cubit/resend_otp_cubit/resend_otp_cubit.dart';
+import '../feature/auth/presentation/cubit/reset_password_cubit/reset_password_cubit.dart';
+import '../feature/auth/presentation/cubit/verfiy_otp_cubit/verfiy_otp_cubit.dart';
+import '../feature/auth/presentation/screen/login_screen.dart';
+import '../feature/auth/presentation/screen/number_resend_code_screen.dart';
+import '../feature/auth/presentation/screen/number_reset_password_screen.dart';
+import '../feature/auth/presentation/screen/register_screen.dart';
+import '../feature/auth/presentation/screen/reset_password_screen.dart';
+import '../feature/auth/presentation/screen/verification_code_screen.dart';
+import '../feature/main/presentation/screen/main_bottom_app_bar.dart';
+import '../feature/more/presentation/cubit/edit_profile_cubit/edit_profile_cubit.dart';
+import '../feature/more/presentation/cubit/get_profile_cubit/get_profile_cubit.dart';
+import '../feature/more/presentation/cubit/upload_profile_image_cubit/upload_profile_image_cubit.dart';
+import '../feature/more/presentation/screen/edit_profile_screen.dart';
+import '../feature/more/presentation/screen/my_trips_screen.dart';
+import '../feature/trip/presentation/cubit/conditions_cubit/conditions_cubit.dart';
+import '../feature/trip/presentation/cubit/edit_trip_cubit/edit_trip_cubit.dart';
+import '../feature/trip/presentation/cubit/my_trips_cubit/my_trips_cubit.dart';
+import '../feature/trip/presentation/cubit/new_trip_cubit/new_trip_cubit.dart';
+import '../feature/trip/presentation/cubit/trip_details_cubit/trip_details_cubit.dart';
+import '../feature/trip/presentation/cubit/trip_offers_cubit/trip_offers_cubit.dart';
+import '../feature/trip/presentation/cubit/trip_routes_cubit/trip_routes_cubit.dart';
+import '../feature/trip/presentation/screen/driver_info_screen.dart';
+import '../feature/trip/presentation/screen/trip_details_screen.dart';
+import '../feature/trip/presentation/screen/trip_offers_screen.dart';
 
 abstract class RouteNamedScreens {
-  static String init = driverHome;
+  static String init =splash ;
   static const String main = "/main-bottom-app-bar";
+  static const String splash = "/splash";
   static const String myTrips = "/my-trips";
   static const String tripDetails = "/trip-details";
   static const String tripOffers = "/trip-offers";
   static const String driverInfo = "/driver-info";
   static const String register = "/register";
   static const String login = "/login";
-  static const String authIntro = "/auth-intro";
   static const String numberResendCodeScreen = "/number-resend-code";
   static const String numberResetPasswordScreen = "/number-reset-password";
   static const String verificationCode = "/verification-code";
   static const String resetPassword = "/reset-password";
   static const String editProfile = "/edit-profile";
-  static const String driverHome = "/driver-home";
 }
 
 abstract class AppRouter {
@@ -71,23 +65,21 @@ abstract class AppRouter {
           page: MultiBlocProvider(
             providers: [
               BlocProvider(
-                  create: (context) => di.sl<MyTripsCubit>()..getMyTrips(context: context)),
+                  create: (context) =>
+                      di.sl<MyTripsCubit>()..getMyTrips(context: context)),
               BlocProvider(
                   create: (context) => di.sl<UploadProfileImageCubit>()),
               BlocProvider(
                 create: (context) =>
-                di.sl<TripRoutesCubit>()
-                  ..getTripRoutes(context: context),
+                    di.sl<TripRoutesCubit>()..getTripRoutes(context: context),
               ),
               BlocProvider(
                 create: (context) =>
-                di.sl<GetProfileCubit>()
-                  ..getProfile(context: context),
+                    di.sl<GetProfileCubit>()..getProfile(context: context),
               ),
               BlocProvider(
                 create: (context) =>
-                di.sl<ConditionsCubit>()
-                  ..getConditions(context: context),
+                    di.sl<ConditionsCubit>()..getConditions(context: context),
               ),
               BlocProvider(
                 create: (context) => di.sl<NewTripCubit>(),
@@ -101,27 +93,14 @@ abstract class AppRouter {
         return FadeBuilderRoute(
           page: BlocProvider(
             create: (context) =>
-            di.sl<MyTripsCubit>()
-              ..getMyTrips(context: context),
+                di.sl<MyTripsCubit>()..getMyTrips(context: context),
             child: MyTripsScreen(),
           ),
         );
-      case RouteNamedScreens.driverHome:
-        CurrentRoute.currentRouteName = RouteNamedScreens.driverHome;
+      case RouteNamedScreens.splash:
+        CurrentRoute.currentRouteName = RouteNamedScreens.splash;
         return FadeBuilderRoute(
-          page: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) =>
-                    di.sl<GetProfileCubit>()..getProfile(context: context),
-              ),
-              BlocProvider(
-                create: (context) => di.sl<DriverHomeCubit>()
-                  ..fetchAvailableTrips(context: context, isUrgent: true, status: const [1, 2]),
-              ),
-            ],
-            child: DriverHomeScreen(),
-          ),
+          page: SplashScreen(),
         );
 
       case RouteNamedScreens.numberResendCodeScreen:
@@ -144,8 +123,7 @@ abstract class AppRouter {
               ),
               BlocProvider(
                 create: (context) =>
-                di.sl<GetProfileCubit>()
-                  ..getProfile(context: context),
+                    di.sl<GetProfileCubit>()..getProfile(context: context),
               )
             ],
             child: EditProfileScreen(),
@@ -183,14 +161,16 @@ abstract class AppRouter {
         return FadeBuilderRoute(
           page: MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) =>
-              di.sl<TripDetailsCubit>()
-                ..getTripDetails(
-                  context: context,
-                  tripId: argument,
-                ),),
-              BlocProvider(create: (context) =>
-              di.sl<EditTripCubit>(),)
+              BlocProvider(
+                create: (context) => di.sl<TripDetailsCubit>()
+                  ..getTripDetails(
+                    context: context,
+                    tripId: argument,
+                  ),
+              ),
+              BlocProvider(
+                create: (context) => di.sl<EditTripCubit>(),
+              )
             ],
             child: TripDetailsScreen(),
           ),
@@ -244,11 +224,7 @@ abstract class AppRouter {
           ),
         );
 
-      case RouteNamedScreens.authIntro:
-        CurrentRoute.currentRouteName = RouteNamedScreens.authIntro;
-        return FadeBuilderRoute(
-          page: AuthIntroScreen(),
-        );
+
     }
     return SlidUpBuilderRoute(page: Scaffold());
   }

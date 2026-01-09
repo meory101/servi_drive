@@ -2,7 +2,7 @@ class AppImageManager {
   static const String _imageBasePath = 'assets/images';
   static String placeholder = '$_imageBasePath/placeholder.png';
   static String splash = '$_imageBasePath/splash.png';
-  static String icon = '$_imageBasePath/icon1.png';
+  static String icon = '$_imageBasePath/icon.png';
   static String chamSale = '$_imageBasePath/icon.png';
   static String login = '$_imageBasePath/icon2.png';
   static String imageadd = '$_imageBasePath/imageadd.png';
